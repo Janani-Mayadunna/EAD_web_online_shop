@@ -1,0 +1,43 @@
+.main-container {
+  display: flex;
+  background-color: black;
+}
+
+#side-nav {
+  background: #8a8585;
+  min-width: 250px;
+  max-width: 250px;
+}
+
+.logoSideBar {
+  height: 120px;
+  width: 50px;
+  padding-left: 50px;
+}
+
+.imgLogoSideBar {
+  height: 100px;
+  width: 150px;
+}
+
+hr.h-color {
+  background: #d71212;
+}
+
+.sidebar li.active {
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+.sidebar li.active a,
+.sidebar li.active a:hover {
+  color: #000;
+}
+
+.sidebar li a {
+  color: #fff;
+}
+
+li {
+  margin-bottom: 10px;
+}
