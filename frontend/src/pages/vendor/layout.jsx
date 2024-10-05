@@ -1,7 +1,7 @@
 import React from "react";
-import Sidebar from "../../components/VndorSidebar/Sidebar";
+import Sidebar from "../../components/VendorSidebar/Sidebar";
 import "./layout.css";
-import SystemNav from "../../components/AdminNav/AdminNav";
+import SystemNav from "../../components/VendorNav/VendorNav";
 
 const Layout = ({ children }) => {
   return (
