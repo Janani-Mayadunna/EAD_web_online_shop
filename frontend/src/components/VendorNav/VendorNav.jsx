@@ -3,7 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
-import VendorImg from "../../images/vendor.jpg";
+import VendorImg from "../../images/vendor.png";
 import "./VendorNav.css";
 import { useState } from "react";
 import { Badge, Dropdown } from "react-bootstrap";
@@ -29,12 +29,45 @@ const VendorNav = () => {
             <img
               src={VendorImg}
               alt="Vendor-Avatar"
-              style={{ height: "40px", width: "40px" }}
+              style={{ height: "50px", width: "50px" }}
             ></img>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
+              {/* System Admin Dropdown */}
+              <NavDropdown active title="System Vendor" id="basic-nav-dropdown">
+                <NavDropdown.Item href="#action/3.1">
+                  <Link
+                    to="/system/admin-profile"
+                    className="nav-link"
+                    aria-current="page"
+                  >
+                    <i
+                      style={{
+                        color: "#359733",
+                      }}
+                      className="bi bi-person-circle bi-2x"
+                    ></i>{" "}
+                    <span style={{ fontSize: "12x", color: "black" }}>
+                      Profile
+                    </span>
+                  </Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2">
+                  <Link
+                    to="/system/auth"
+                    style={{ color: "#359733" }}
+                    className="nav-link"
+                    onClick={logout}
+                  >
+                    <i className="bi bi-box-arrow-right"></i>{" "}
+                    <span style={{ fontSize: "12px", color: "black" }}>
+                      Log Out
+                    </span>
+                  </Link>
+                </NavDropdown.Item>
+              </NavDropdown>
               {/* Notification Bell */}
               <Dropdown
                 show={showLowStock}
@@ -68,40 +101,6 @@ const VendorNav = () => {
                   )}
                 </Dropdown.Menu>
               </Dropdown>
-
-              {/* System Admin Dropdown */}
-              <NavDropdown active title="Vendor" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  <Link
-                    to="/system/admin-profile"
-                    className="nav-link"
-                    aria-current="page"
-                  >
-                    <i
-                      style={{
-                        color: "#359733",
-                      }}
-                      className="bi bi-person-circle bi-2x"
-                    ></i>{" "}
-                    <span style={{ fontSize: "12x", color: "black" }}>
-                      Profile
-                    </span>
-                  </Link>
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  <Link
-                    to="/system/auth"
-                    style={{ color: "#359733" }}
-                    className="nav-link"
-                    onClick={logout}
-                  >
-                    <i className="bi bi-box-arrow-right"></i>{" "}
-                    <span style={{ fontSize: "12px", color: "black" }}>
-                      Log Out
-                    </span>
-                  </Link>
-                </NavDropdown.Item>
-              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

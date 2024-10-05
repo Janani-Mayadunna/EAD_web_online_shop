@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
 import $ from "jquery";
-import Logo from "../../images/sample-logo.png";
+import Logo from "../../images/logo.png";
 import { Link, useLocation } from "react-router-dom";
 
-const Sidebar = () => {
+const VendorSidebar = () => {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState("");
 
@@ -22,9 +22,14 @@ const Sidebar = () => {
   return (
     <div className="main-container">
       <div className="sidebar" id="side-nav">
-        <div className="header-box px-3 pt-3 pb-4 d-flex">
+        <div
+          className="header-box px-3 pb-4 d-flex"
+          style={{
+            paddingTop: "60px",
+          }}
+        >
           <h1 className="fs-3 px-4 items-center">
-            <span className="text-white">VendorDB</span>
+            <span className="text-black">Smart Store</span>
           </h1>
           <button className="btn d-md-none d-block close-btn px-2 py-0 text-white">
             <i class="bi bi-list"></i>
@@ -57,60 +62,48 @@ const Sidebar = () => {
                 </span>
               </Link>
             </li>
-            <li
-              className={
-                activeItem === "/system/admin-allproducts" ? "active" : ""
-              }
-            >
+            <li className={activeItem === "/admin/allproducts" ? "active" : ""}>
               <Link
-                to="/system/admin-allproducts"
+                to="/admin/allproducts"
                 className="text-decoration-none px-3 py-2 d-block"
               >
                 <i class="bi bi-card-list"></i>
                 <span style={{ paddingLeft: "0.7rem" }}>
-                  Products Management
+                  Product Management
                 </span>
               </Link>
             </li>
-
-            <li
-              className={
-                activeItem === "/system/admin-tracking" ? "active" : ""
-              }
-            >
+            <li className={activeItem === "/admin/allproducts" ? "active" : ""}>
               <Link
-                to="/system/admin-tracking"
+                to="/admin/allproducts"
                 className="text-decoration-none px-3 py-2 d-block"
               >
-                <i class="bi bi-truck"></i>
-                <span style={{ paddingLeft: "0.7rem" }}>Order Management</span>
+                <i class="bi bi-card-list"></i>
+                <span style={{ paddingLeft: "0.7rem" }}>
+                  Order Management
+                </span>
               </Link>
             </li>
-
-            <li
-              className={
-                activeItem === "/system/admin-allusers" ? "active" : ""
-              }
-            >
+            <li className={activeItem === "/admin/allproducts" ? "active" : ""}>
               <Link
-                to="/system/admin-allusers"
+                to="/admin/allproducts"
                 className="text-decoration-none px-3 py-2 d-block"
               >
-                <i class="bi bi-people"></i>
-                <span style={{ paddingLeft: "0.7rem" }}>Rate and Review</span>
+                <i class="bi bi-card-list"></i>
+                <span style={{ paddingLeft: "0.7rem" }}>
+                  Profile
+                </span>
               </Link>
             </li>
-            <li
-              className={
-                activeItem === "/system/admin-allsellers" ? "active" : ""
-              }
-            >
+            <li className={activeItem === "/admin/allproducts" ? "active" : ""}>
               <Link
-                to="/system/admin-allsellers"
+                to="/admin/allproducts"
                 className="text-decoration-none px-3 py-2 d-block"
               >
-                <i class="bi bi-people"></i>
-                <span style={{ paddingLeft: "0.7rem" }}>My Profile</span>
+                <i class="bi bi-card-list"></i>
+                <span style={{ paddingLeft: "0.7rem" }}>
+                  Rate and Reviews
+                </span>
               </Link>
             </li>
           </ul>
@@ -121,4 +114,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default VendorSidebar;
