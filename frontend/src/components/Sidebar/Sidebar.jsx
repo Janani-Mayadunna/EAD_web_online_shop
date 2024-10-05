@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Sidebar.css';
 import $ from 'jquery';
-import Logo from '../../images/sample-logo.png';
+import Logo from '../../images/logo.png';
 import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
@@ -22,9 +22,13 @@ const Sidebar = () => {
   return (
     <div className="main-container">
       <div className="sidebar" id="side-nav">
-        <div className="header-box px-3 pt-3 pb-4 d-flex">
+        <div className="header-box px-3 pb-4 d-flex"
+        style={{
+          paddingTop: '60px',
+        }}
+        >
           <h1 className="fs-3 px-4 items-center">
-            <span className="text-white">NB</span>
+            <span className="text-black">Smart Store</span>
           </h1>
           <button className="btn d-md-none d-block close-btn px-2 py-0 text-white">
             <i class="bi bi-list"></i>
@@ -65,11 +69,11 @@ const Sidebar = () => {
             </li>
             <li
               className={
-                activeItem === '/system/admin-allproducts' ? 'active' : ''
+                activeItem === '/admin/allproducts' ? 'active' : ''
               }
             >
               <Link
-                to="/system/admin-allproducts"
+                to="/admin/allproducts"
                 className="text-decoration-none px-3 py-2 d-block"
               >
                 <i class="bi bi-card-list"></i>
@@ -77,57 +81,9 @@ const Sidebar = () => {
               </Link>
             </li>
 
-            <li
-              className={
-                activeItem === '/system/admin-tracking' ? 'active' : ''
-              }
-            >
-              <Link
-                to="/system/admin-tracking"
-                className="text-decoration-none px-3 py-2 d-block"
-              >
-                <i class="bi bi-truck"></i>
-                <span style={{ paddingLeft: '0.7rem' }}>Delivery Tracking</span>
-              </Link>
-            </li>
+           
 
-            <li
-              className={
-                activeItem === '/system/admin-allusers' ? 'active' : ''
-              }
-            >
-              <Link
-                to="/system/admin-allusers"
-                className="text-decoration-none px-3 py-2 d-block"
-              >
-                <i class="bi bi-people"></i>
-                <span style={{ paddingLeft: '0.7rem' }}>Users</span>
-              </Link>
-            </li>
-            <li
-              className={
-                activeItem === '/system/admin-allsellers' ? 'active' : ''
-              }
-            >
-              <Link
-                to="/system/admin-allsellers"
-                className="text-decoration-none px-3 py-2 d-block"
-              >
-                <i class="bi bi-people"></i>
-                <span style={{ paddingLeft: '0.7rem' }}>Sellers</span>
-              </Link>
-            </li>
-            <li
-              className={activeItem === '/system/admin-profile' ? 'active' : ''}
-            >
-              <Link
-                to="/system/admin-profile"
-                className="text-decoration-none px-3 py-2 d-block"
-              >
-                <i class="bi bi-person-square"></i>
-                <span style={{ paddingLeft: '0.7rem' }}>My Profile</span>
-              </Link>
-            </li>
+           
           </ul>
         </div>
         <hr className="h-color mx-2" />
