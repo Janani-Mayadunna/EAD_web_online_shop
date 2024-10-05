@@ -1,14 +1,22 @@
 import React from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import './layout.css';
+import SystemNav from '../../components/AdminNav/AdminNav';
 
 const Layout = ({ children }) => {
   return (
     <div className='mainContainer'>
       <div className='sidebar'>
-      <Sidebar />
+        <Sidebar />
       </div>
-      <div className='contentContainer'>{children}</div>
+      <div className='contentContainer'>
+        <div className='systemNavBar'>
+          <SystemNav />
+        </div>
+        <div className='content'>
+          {children}
+        </div>
+      </div>
     </div>
   );
 };
