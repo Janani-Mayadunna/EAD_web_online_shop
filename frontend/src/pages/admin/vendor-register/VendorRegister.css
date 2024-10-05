@@ -1,0 +1,45 @@
+.vendor-card {
+  background: linear-gradient(135deg, #f0f4fd, #99aabf);
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.vendor-header {
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.vendor-form-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.vendor-input {
+  transition: box-shadow 0.3s ease;
+  padding-right: 2.5rem;
+}
+
+.vendor-input:focus {
+  box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+  border-color: #2196f3;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+}
+
+.vendor-btn {
+  background: #2196f3;
+  border: none;
+  width: 100%;
+}
+
+.vendor-btn:hover {
+  background: #1976d2;
+}

@@ -1,8 +1,8 @@
 import React from 'react';
 import Layout from '../layout';
 import DataTable from 'react-data-table-component';
-import { tableCustomStyles } from '../tableStyle';
-import products from '../data/products.json';
+import { tableCustomStyles } from '../../tableStyle';
+import products from '../../data/products.json';
 import UpdateStockModal from '../stock-manage/UpdateStockModal';
 
 const AdminAllProducts = () => {

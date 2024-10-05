@@ -1,15 +1,14 @@
 import React from 'react';
 import Layout from '../layout';
-import DashInfoCard from '../../../components/DashInfoCard/DashInfoCard';
 
-const AdminDashboard = () => {
+const CSROrderDetails = () => {
   return (
     <Layout>
       <div className='childContainerAdmin'>
-        <DashInfoCard />
+        <h1>Orders can be displayed here</h1>
       </div>
     </Layout>
   );
 };
 
-export default AdminDashboard;
+export default CSROrderDetails;
