@@ -1,0 +1,242 @@
+[
+    {
+        "id": "66fc631eb675929162618440",
+        "name": "IPhone XR",
+        "description": "Powerful smartphone with A12 Bionic chip.",
+        "category": {
+            "id": "66fc61b9b67592916261843c",
+            "name": "Phones",
+            "isActive": true
+        },
+        "price": 500,
+        "isActive": false,
+        "inventoryCount": 10,
+        "lowStockAlert": 2,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191009",
+            "name": "TechVendor",
+            "ratings": {
+                "average": 4.5,
+                "totalReviews": 150
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618441",
+        "name": "Samsung Galaxy S21",
+        "description": "High-end smartphone with powerful Exynos 2100 chip.",
+        "category": {
+            "id": "66fc61b9b67592916261843c",
+            "name": "Phones",
+            "isActive": true
+        },
+        "price": 700,
+        "isActive": true,
+        "inventoryCount": 1,
+        "lowStockAlert": 5,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191010",
+            "name": "MobileWorld",
+            "ratings": {
+                "average": 4.7,
+                "totalReviews": 300
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618442",
+        "name": "MacBook Air M1",
+        "description": "Laptop with the powerful M1 chip by Apple.",
+        "category": {
+            "id": "66fc61b9b67592916261843d",
+            "name": "Laptops",
+            "isActive": true
+        },
+        "price": 1200,
+        "isActive": true,
+        "inventoryCount": 1,
+        "lowStockAlert": 3,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191011",
+            "name": "AppleStore",
+            "ratings": {
+                "average": 4.8,
+                "totalReviews": 220
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618443",
+        "name": "Dell XPS 13",
+        "description": "Sleek and powerful ultrabook with 11th Gen Intel processor.",
+        "category": {
+            "id": "66fc61b9b67592916261843d",
+            "name": "Laptops",
+            "isActive": true
+        },
+        "price": 1000,
+        "isActive": true,
+        "inventoryCount": 15,
+        "lowStockAlert": 4,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191012",
+            "name": "TechWorld",
+            "ratings": {
+                "average": 4.6,
+                "totalReviews": 180
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618444",
+        "name": "Sony WH-1000XM4",
+        "description": "Wireless noise-canceling headphones by Sony.",
+        "category": {
+            "id": "66fc61b9b67592916261843e",
+            "name": "Accessories",
+            "isActive": true
+        },
+        "price": 350,
+        "isActive": true,
+        "inventoryCount": 25,
+        "lowStockAlert": 5,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191013",
+            "name": "AudioZone",
+            "ratings": {
+                "average": 4.9,
+                "totalReviews": 500
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618445",
+        "name": "Apple Watch Series 6",
+        "description": "Smartwatch with health and fitness tracking.",
+        "category": {
+            "id": "66fc61b9b67592916261843f",
+            "name": "Wearables",
+            "isActive": true
+        },
+        "price": 400,
+        "isActive": true,
+        "inventoryCount": 30,
+        "lowStockAlert": 6,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191014",
+            "name": "GadgetStore",
+            "ratings": {
+                "average": 4.7,
+                "totalReviews": 350
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618446",
+        "name": "Google Nest Hub",
+        "description": "Smart home device with Google Assistant.",
+        "category": {
+            "id": "66fc61b9b675929162618440",
+            "name": "Smart Home",
+            "isActive": true
+        },
+        "price": 100,
+        "isActive": true,
+        "inventoryCount": 50,
+        "lowStockAlert": 8,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191015",
+            "name": "SmartHome",
+            "ratings": {
+                "average": 4.5,
+                "totalReviews": 200
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618447",
+        "name": "HP Envy Printer",
+        "description": "Wireless all-in-one printer.",
+        "category": {
+            "id": "66fc61b9b675929162618441",
+            "name": "Printers",
+            "isActive": true
+        },
+        "price": 150,
+        "isActive": true,
+        "inventoryCount": 20,
+        "lowStockAlert": 3,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191016",
+            "name": "PrintZone",
+            "ratings": {
+                "average": 4.4,
+                "totalReviews": 120
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618448",
+        "name": "Logitech MX Master 3",
+        "description": "Ergonomic wireless mouse.",
+        "category": {
+            "id": "66fc61b9b67592916261843e",
+            "name": "Accessories",
+            "isActive": true
+        },
+        "price": 100,
+        "isActive": true,
+        "inventoryCount": 40,
+        "lowStockAlert": 5,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191017",
+            "name": "PeripheralStore",
+            "ratings": {
+                "average": 4.8,
+                "totalReviews": 210
+            },
+            "comments": []
+        }
+    },
+    {
+        "id": "66fc631eb675929162618449",
+        "name": "Amazon Echo Dot",
+        "description": "Smart speaker with Alexa.",
+        "category": {
+            "id": "66fc61b9b675929162618440",
+            "name": "Smart Home",
+            "isActive": true
+        },
+        "price": 50,
+        "isActive": true,
+        "inventoryCount": 60,
+        "lowStockAlert": 10,
+        "images": [],
+        "vendor": {
+            "id": "66f99b15892861de49191018",
+            "name": "SmartLife",
+            "ratings": {
+                "average": 4.6,
+                "totalReviews": 400
+            },
+            "comments": []
+        }
+    }
+]
