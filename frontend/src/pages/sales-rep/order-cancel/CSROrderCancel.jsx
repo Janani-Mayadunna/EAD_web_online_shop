@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../layout';
 import DataTable from 'react-data-table-component';
 import { tableCustomStyles } from '../../tableStyle';
-import orders from '../data/orders.json';
+import orders from '../../data/orders.json';
 
 const CSROrderCancel = () => {
   const [cancelRequests, setCancelRequests] = useState([]);
