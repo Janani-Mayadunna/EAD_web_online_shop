@@ -1,0 +1,302 @@
+[
+  {
+    "id": "66ff27c6490491d81a9bc9e9",
+    "userId": "66f9982c453ac048b63062db",
+    "phoneNumber": "0775612285",
+    "deliveryAddress": "No.12, Main Street, Colombo",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9e8",
+        "productId": "66fc631eb675929162618440",
+        "name": "IPhone XR",
+        "quantity": 3,
+        "price": 500.00,
+        "status": "Processing",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9ea",
+        "productId": "66fc631eb675929162618441",
+        "name": "Apple AirPods Pro",
+        "quantity": 2,
+        "price": 200.00,
+        "status": "Processing",
+        "images": []
+      }
+    ],
+    "totalPrice": 1900.00,
+    "status": "Processing",
+    "isCancelRequested": true,
+    "note": "Request cancellation"
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9eb",
+    "userId": "66f9982c453ac048b63062dc",
+    "phoneNumber": "0775611234",
+    "deliveryAddress": "No.45, Galle Road, Colombo",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9e7",
+        "productId": "66fc631eb675929162618441",
+        "name": "Samsung Galaxy S21",
+        "quantity": 1,
+        "price": 700.00,
+        "status": "Shipped",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9e6",
+        "productId": "66fc631eb675929162618442",
+        "name": "Samsung Wireless Charger",
+        "quantity": 1,
+        "price": 80.00,
+        "status": "Shipped",
+        "images": []
+      }
+    ],
+    "totalPrice": 780.00,
+    "status": "Shipped",
+    "isCancelRequested": false,
+    "note": "Deliver on Saturday"
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9ec",
+    "userId": "66f9982c453ac048b63062dd",
+    "phoneNumber": "0775613345",
+    "deliveryAddress": "No.19, Temple Street, Kandy",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9e5",
+        "productId": "66fc631eb675929162618443",
+        "name": "MacBook Air M1",
+        "quantity": 1,
+        "price": 1200.00,
+        "status": "Delivered",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9e4",
+        "productId": "66fc631eb675929162618444",
+        "name": "Logitech Mouse",
+        "quantity": 3,
+        "price": 50.00,
+        "status": "Delivered",
+        "images": []
+      }
+    ],
+    "totalPrice": 1350.00,
+    "status": "Delivered",
+    "isCancelRequested": true,
+    "note": "Handle with care"
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9ed",
+    "userId": "66f9982c453ac048b63062de",
+    "phoneNumber": "0775615566",
+    "deliveryAddress": "No.8, High Level Road, Nugegoda",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9e3",
+        "productId": "66fc631eb675929162618445",
+        "name": "Dell XPS 13",
+        "quantity": 1,
+        "price": 1000.00,
+        "status": "Processing",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9e2",
+        "productId": "66fc631eb675929162618446",
+        "name": "Dell Docking Station",
+        "quantity": 1,
+        "price": 150.00,
+        "status": "Processing",
+        "images": []
+      }
+    ],
+    "totalPrice": 1150.00,
+    "status": "Processing",
+    "isCancelRequested": true,
+    "note": "Requesting cancellation"
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9ee",
+    "userId": "66f9982c453ac048b63062df",
+    "phoneNumber": "0775618888",
+    "deliveryAddress": "No.50, Park Street, Colombo",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9e1",
+        "productId": "66fc631eb675929162618447",
+        "name": "Sony WH-1000XM4",
+        "quantity": 4,
+        "price": 350.00,
+        "status": "Delivered",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9e0",
+        "productId": "66fc631eb675929162618448",
+        "name": "Sony USB-C Adapter",
+        "quantity": 2,
+        "price": 25.00,
+        "status": "Delivered",
+        "images": []
+      }
+    ],
+    "totalPrice": 1450.00,
+    "status": "Delivered",
+    "isCancelRequested": false,
+    "note": ""
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9ef",
+    "userId": "66f9982c453ac048b63062e0",
+    "phoneNumber": "0775619999",
+    "deliveryAddress": "No.10, Sea Avenue, Negombo",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9df",
+        "productId": "66fc631eb675929162618449",
+        "name": "Apple Watch Series 6",
+        "quantity": 1,
+        "price": 400.00,
+        "status": "Processing",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9de",
+        "productId": "66fc631eb675929162618450",
+        "name": "Apple Watch Band",
+        "quantity": 3,
+        "price": 50.00,
+        "status": "Processing",
+        "images": []
+      }
+    ],
+    "totalPrice": 550.00,
+    "status": "Processing",
+    "isCancelRequested": true,
+    "note": "Please gift wrap"
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9f0",
+    "userId": "66f9982c453ac048b63062e1",
+    "phoneNumber": "0775621111",
+    "deliveryAddress": "No.66, Church Road, Matara",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9dd",
+        "productId": "66fc631eb675929162618451",
+        "name": "Google Nest Hub",
+        "quantity": 1,
+        "price": 100.00,
+        "status": "Delivered",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9dc",
+        "productId": "66fc631eb675929162618452",
+        "name": "Google Nest Mini",
+        "quantity": 2,
+        "price": 50.00,
+        "status": "Delivered",
+        "images": []
+      }
+    ],
+    "totalPrice": 200.00,
+    "status": "Delivered",
+    "isCancelRequested": false,
+    "note": ""
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9f1",
+    "userId": "66f9982c453ac048b63062e2",
+    "phoneNumber": "0775622222",
+    "deliveryAddress": "No.33, Station Road, Gampaha",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9db",
+        "productId": "66fc631eb675929162618453",
+        "name": "HP Envy Printer",
+        "quantity": 1,
+        "price": 150.00,
+        "status": "Processing",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9da",
+        "productId": "66fc631eb675929162618454",
+        "name": "Printer Paper",
+        "quantity": 5,
+        "price": 10.00,
+        "status": "Processing",
+        "images": []
+      }
+    ],
+    "totalPrice": 200.00,
+    "status": "Processing",
+    "isCancelRequested": true,
+    "note": ""
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9f2",
+    "userId": "66f9982c453ac048b63062e3",
+    "phoneNumber": "0775623333",
+    "deliveryAddress": "No.1, Rose Street, Kandy",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9d9",
+        "productId": "66fc631eb675929162618455",
+        "name": "Logitech MX Master 3",
+        "quantity": 2,
+        "price": 100.00,
+        "status": "Shipped",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9d8",
+        "productId": "66fc631eb675929162618456",
+        "name": "Logitech Keyboard",
+        "quantity": 1,
+        "price": 120.00,
+        "status": "Shipped",
+        "images": []
+      }
+    ],
+    "totalPrice": 320.00,
+    "status": "Shipped",
+    "isCancelRequested": false,
+    "note": ""
+  },
+  {
+    "id": "66ff27c6490491d81a9bc9f3",
+    "userId": "66f9982c453ac048b63062e4",
+    "phoneNumber": "0775624444",
+    "deliveryAddress": "No.88, Victoria Lane, Colombo",
+    "items": [
+      {
+        "id": "66ff27c6490491d81a9bc9d7",
+        "productId": "66fc631eb675929162618457",
+        "name": "Amazon Echo Dot",
+        "quantity": 3,
+        "price": 50.00,
+        "status": "Processing",
+        "images": []
+      },
+      {
+        "id": "66ff27c6490491d81a9bc9d6",
+        "productId": "66fc631eb675929162618458",
+        "name": "Fire TV Stick",
+        "quantity": 2,
+        "price": 40.00,
+        "status": "Processing",
+        "images": []
+      }
+    ],
+    "totalPrice": 270.00,
+    "status": "Processing",
+    "isCancelRequested": true,
+    "note": "Deliver in the evening"
+  }
+]
