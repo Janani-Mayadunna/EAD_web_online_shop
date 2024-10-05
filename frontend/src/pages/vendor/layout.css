@@ -1,0 +1,32 @@
+.mainContainer {
+    display: flex;
+    width: 100%;
+  }
+  
+  .sidebar {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    left: 0;
+  }
+  .contentContainer {
+    width: 100%;
+    position: relative;
+    display: grid;
+  }
+  
+  .content {
+    padding-top: 0rem;
+    padding-bottom: 3rem;
+    padding-left: 4rem;
+    padding-right: 3rem;
+    /* background-color: white !important; */
+  }
+  
+  .systemNavBar {
+    width: 100%;
+  }
+  
+  .childContainerAdmin {
+    padding: 1rem;
+  }
