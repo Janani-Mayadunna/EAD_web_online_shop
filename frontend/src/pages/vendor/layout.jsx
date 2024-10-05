@@ -19,7 +19,7 @@ const Layout = ({ children, pageTitle, icon, breadcrumb }) => {
                   fontSize: "20px",
                   marginRight: "10px",
                   marginLeft: "10px",
-                  marginTop: "15px",
+                  paddingTop: "25px",
                 }}
               >
                 {pageTitle} {/* Dynamic title */}
@@ -54,8 +54,8 @@ const Layout = ({ children, pageTitle, icon, breadcrumb }) => {
         <div
           className="content"
           style={{
-            paddingLeft: "0.5rem",
-            paddingRight: "0.5rem",
+            paddingLeft: "2rem",
+            paddingRight: "2rem",
             paddingTop: "2rem",
           }}
         >

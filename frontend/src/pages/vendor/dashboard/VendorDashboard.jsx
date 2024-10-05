@@ -5,12 +5,11 @@ const VendorDashboard = () => {
   return (
     <Layout
       pageTitle="Vendor Dashboard"
-      icon="bi bi-house-door" 
+      icon="bi bi-house-door"
       breadcrumb="Dashboard"
     >
-      <div className="col-md-12 bg-danger">
+      <div className="col-md-12" style={{ backgroundColor: "#f0f0f0" }}>
         <h1>Vendor Dashboard</h1>
-
       </div>
     </Layout>
   );
