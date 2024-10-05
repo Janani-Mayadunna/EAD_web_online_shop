@@ -1,30 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../layout";
 import DataTable from "react-data-table-component";
 import AddCategoryModal from "./AddCategoryModal";
 import UpdateCategoryModal from "./UpdateCategoryModal";
-//D:\SLIIT\Y4S2\EAD\Assignment\WebApp\EAD_web_online_shop\frontend\src\pages\vendor\category\VendorCategory.css
+import axios from "axios"; // Import Axios
 import "./VendorCategory.css";
 
-// Sample data for categories
-const sampleCategories = [
-  { id: "1", name: "Laptops", isActive: true },
-  { id: "2", name: "Smartphones", isActive: true },
-  { id: "3", name: "Accessories", isActive: false },
-  { id: "4", name: "Smart Watches", isActive: true },
-  { id: "5", name: "Tablets", isActive: true },
-  { id: "6", name: "Desktops", isActive: false },
-  { id: "7", name: "Printers", isActive: true },
-  { id: "8", name: "Scanners", isActive: true },
-  { id: "9", name: "Storage Devices", isActive: true },
-  { id: "10", name: "Networking Devices", isActive: true },
-];
-
 const VendorCategory = () => {
-  const [categories, setCategories] = useState(sampleCategories);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [openAddCategoryModal, setOpenAddCategoryModal] = useState(false);
   const [openUpdateCategoryModal, setOpenUpdateCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // Fetch categories when the component mounts
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        // Fetch categories from the API
+        const response = await axios.get(
+          "https://localhost:7282/api/category",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("vendor_token")}`,
+            },
+          }
+        );
+        setCategories(response.data); // Update the categories state with the fetched data
+        setLoading(false);
+      } catch (error) {
+        setError("Failed to fetch categories");
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []); // Empty dependency array ensures it runs only once on mount
 
   const handleAddCategoryClick = () => {
     setOpenAddCategoryModal(true);
@@ -103,28 +115,34 @@ const VendorCategory = () => {
 
       {/* Data Table */}
       <div className="col-md-12" style={{ backgroundColor: "#f0f0f0" }}>
-        <DataTable
-          columns={columns}
-          data={categories}
-          pagination={true}
-          paginationPerPage={10}
-          paginationRowsPerPageOptions={[10, 20, 30, 45, 50]}
-          noDataComponent="No Categories Found"
-          customStyles={{
-            headCells: {
-              style: {
-                fontSize: "18px",
-                fontWeight: "bold",
-                backgroundColor: "#e0e0e0",
+        {loading ? (
+          <p>Loading categories...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <DataTable
+            columns={columns}
+            data={categories}
+            pagination={true}
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[10, 20, 30, 45, 50]}
+            noDataComponent="No Categories Found"
+            customStyles={{
+              headCells: {
+                style: {
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  backgroundColor: "#e0e0e0",
+                },
               },
-            },
-            cells: {
-              style: {
-                fontSize: "16px",
+              cells: {
+                style: {
+                  fontSize: "16px",
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        )}
       </div>
 
       {/* Add Category Modal */}
