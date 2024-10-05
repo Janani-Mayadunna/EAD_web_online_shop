@@ -1,11 +1,12 @@
 import React from 'react';
 import Layout from '../layout';
+import DashInfoCard from '../../../components/DashInfoCard/DashInfoCard';
 
 const AdminDashboard = () => {
   return (
     <Layout>
       <div className='childContainerAdmin'>
-        <h1>Admin Dashboard</h1>
+        <DashInfoCard />
       </div>
     </Layout>
   );
