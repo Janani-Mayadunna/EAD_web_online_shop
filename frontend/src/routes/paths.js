@@ -5,7 +5,12 @@ const ROUTE = {
   ADMIN_ALL_PRODUCTS: "/admin/allproducts",
   CSR_ORDER_DETAILS: "/csr/orders",
   CSR_CANCEL_REQUESTS: "/csr/cancel-requests",
-  VENDOR_DASHBOARD: '/vendor',
+  VENDOR_DASHBOARD: "/vendor",
+  VENDOR_CATEGORY: "/vendor/category",
+  VENDOR_PRODUCTS: "/vendor/products",
+  VENDOR_ORDERS: "/vendor/orders",
+  VENDOR_PROFILE: "/vendor/profile",
+  VENDOR_RATES: "/vendor/rates",
 };
 
 export default ROUTE;

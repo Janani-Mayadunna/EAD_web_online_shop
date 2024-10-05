@@ -51,59 +51,53 @@ const VendorSidebar = () => {
                 <span style={{ paddingLeft: "0.7rem" }}>Dashboard</span>
               </Link>
             </li>
-            <li className={activeItem === "/vendor/register" ? "active" : ""}>
+            <li className={activeItem === "/vendor/category" ? "active" : ""}>
               <Link
-                to="/vendor/register"
+                to="/vendor/category"
                 className="text-decoration-none px-3 py-2 d-block"
               >
-                <i class="bi bi-bag-plus"></i>
+                <i class="bi bi-tags"></i>
                 <span style={{ paddingLeft: "0.7rem" }}>
                   Category Management
                 </span>
               </Link>
             </li>
-            <li className={activeItem === "/admin/allproducts" ? "active" : ""}>
+            <li className={activeItem === "/vendor/products" ? "active" : ""}>
               <Link
-                to="/admin/allproducts"
+                to="/vendor/products"
                 className="text-decoration-none px-3 py-2 d-block"
               >
-                <i class="bi bi-card-list"></i>
+                <i class="bi bi-box-seam"></i>
                 <span style={{ paddingLeft: "0.7rem" }}>
                   Product Management
                 </span>
               </Link>
             </li>
-            <li className={activeItem === "/admin/allproducts" ? "active" : ""}>
+            <li className={activeItem === "/vendor/orders" ? "active" : ""}>
               <Link
-                to="/admin/allproducts"
+                to="/vendor/orders"
                 className="text-decoration-none px-3 py-2 d-block"
               >
-                <i class="bi bi-card-list"></i>
-                <span style={{ paddingLeft: "0.7rem" }}>
-                  Order Management
-                </span>
+                <i class="bi bi-card-checklist"></i>
+                <span style={{ paddingLeft: "0.7rem" }}>Order Management</span>
               </Link>
             </li>
-            <li className={activeItem === "/admin/allproducts" ? "active" : ""}>
+            <li className={activeItem === "/vendor/profile" ? "active" : ""}>
               <Link
-                to="/admin/allproducts"
+                to="/vendor/profile"
                 className="text-decoration-none px-3 py-2 d-block"
               >
-                <i class="bi bi-card-list"></i>
-                <span style={{ paddingLeft: "0.7rem" }}>
-                  Profile
-                </span>
+                <i class="bi bi-person-circle"></i>
+                <span style={{ paddingLeft: "0.7rem" }}>Vendor Profile</span>
               </Link>
             </li>
-            <li className={activeItem === "/admin/allproducts" ? "active" : ""}>
+            <li className={activeItem === "/vendor/rates" ? "active" : ""}>
               <Link
-                to="/admin/allproducts"
+                to="/vendor/rates"
                 className="text-decoration-none px-3 py-2 d-block"
               >
-                <i class="bi bi-card-list"></i>
-                <span style={{ paddingLeft: "0.7rem" }}>
-                  Rate and Reviews
-                </span>
+                <i class="bi bi-star-half"></i>
+                <span style={{ paddingLeft: "0.7rem" }}>Rate and Reviews</span>
               </Link>
             </li>
           </ul>

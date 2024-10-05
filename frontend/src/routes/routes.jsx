@@ -7,7 +7,11 @@ import AdminAllProducts from '../pages/admin/all-products/AdminAllProducts';
 import CSRDashboard from '../pages/sales-rep/order-details/CSROrderDetails';
 import CSROrderCancel from '../pages/sales-rep/order-cancel/CSROrderCancel';
 import VendorDashboard from '../pages/vendor/dashboard/VendorDashboard';
-
+import VendorCategory from '../pages/vendor/category/VendorCategory';
+import VendorProducts from '../pages/vendor/products/VendorProducts';
+import VendorOrders from '../pages/vendor/orders/VendorOrders';
+import VendorProfile from '../pages/vendor/vendor-profile/VendorProfile';
+import VendorRates from '../pages/vendor/rate-reviews/VendorRates';
 
 const routers = [
   {
@@ -27,16 +31,36 @@ const routers = [
     component: AdminAllProducts,
   },
   {
-    path: ROUTE.VENDOR_DASHBOARD,
-    component: VendorDashboard,
-  },
-  {
     path: ROUTE.CSR_ORDER_DETAILS,
     component: CSRDashboard,
   },
   {
     path: ROUTE.CSR_CANCEL_REQUESTS,
     component: CSROrderCancel,
+  },
+  {
+    path: ROUTE.VENDOR_DASHBOARD,
+    component: VendorDashboard,
+  },
+  {
+    path: ROUTE.VENDOR_CATEGORY,
+    component: VendorCategory,
+  },
+  {
+    path: ROUTE.VENDOR_PRODUCTS,
+    component: VendorProducts,
+  },
+  {
+    path: ROUTE.VENDOR_ORDERS,
+    component: VendorOrders,
+  },
+  {
+    path: ROUTE.VENDOR_PROFILE,
+    component: VendorProfile,
+  },
+  {
+    path: ROUTE.VENDOR_RATES,
+    component: VendorRates,
   },
 ];
 

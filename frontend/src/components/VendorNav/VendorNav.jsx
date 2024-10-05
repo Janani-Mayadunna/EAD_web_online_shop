@@ -7,7 +7,7 @@ import VendorImg from "../../images/vendor.png";
 import "./VendorNav.css";
 import { useState } from "react";
 import { Badge, Dropdown } from "react-bootstrap";
-import products from "../../pages/admin/data/products.json";
+import products from "../../pages/data/products.json";
 
 const VendorNav = () => {
   const [showLowStock, setShowLowStock] = useState(false);
