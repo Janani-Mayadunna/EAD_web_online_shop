@@ -1,21 +1,19 @@
 import React from 'react';
-import AdminSidebar from '../../components/AdminSidebar/AdminSidebar';
-import './layout.css';
-import SystemNav from '../../components/AdminNav/AdminNav';
+import '../admin/layout.css';
+import CSRNavBar from '../../components/CSRNavBar/CSRNavBar';
+import CSRSidebar from '../../components/CSRSidebar/CSRSidebar';
 
 const Layout = ({ children }) => {
   return (
     <div className='mainContainer'>
       <div className='sidebar'>
-        <AdminSidebar />
+        <CSRSidebar />
       </div>
       <div className='contentContainer'>
         <div className='systemNavBar'>
-          <SystemNav />
+          <CSRNavBar />
         </div>
-        <div className='content'>
-          {children}
-        </div>
+        <div className='content'>{children}</div>
       </div>
     </div>
   );

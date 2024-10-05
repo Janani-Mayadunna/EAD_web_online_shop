@@ -4,7 +4,7 @@ import $ from 'jquery';
 import Logo from '../../images/logo.png';
 import { Link, useLocation } from 'react-router-dom';
 
-const Sidebar = () => {
+const AdminSidebar = () => {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState('');
 
@@ -92,4 +92,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default AdminSidebar;
