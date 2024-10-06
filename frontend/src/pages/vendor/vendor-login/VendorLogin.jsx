@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import Layout from "../layout";
 import "./VendorLogin.css";
 import Logo from "../../../images/logo.png";
@@ -22,6 +22,7 @@ const VendorLogin = () => {
     };
 
     try {
+      // First, make the login request
       const response = await axios.post(
         "https://localhost:7282/api/auth/login",
         requestBody,
@@ -34,14 +35,34 @@ const VendorLogin = () => {
 
       if (response.status === 200) {
         // Store token in local storage
-        localStorage.setItem("vendor_token", response.data.token);
-        // Redirect to vendor dashboard
-        navigate("/vendor");
+        const token = response.data.token;
+        localStorage.setItem("vendor_token", token);
+
+        // Now fetch the vendor data using the token
+        const vendorResponse = await axios.get(
+          "https://localhost:7282/api/vendor/currentUser",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Pass token in headers
+            },
+          }
+        );
+
+        if (vendorResponse.status === 200) {
+          // Extract vendor data
+          const { id: vendorId, owner: userId } = vendorResponse.data;
+
+          // Store vendor_id and user_id in local storage
+          localStorage.setItem("vendor_id", vendorId);
+          localStorage.setItem("user_id", userId);
+
+          // Redirect to vendor dashboard
+          navigate("/vendor");
+        }
       }
     } catch (error) {
       // Set error message based on response or network error
-      console.log("Login error:", error); 
-      
+      console.log("Login error:", error);
       if (error.response) {
         setError(
           error.response.data.message || "Failed to login. Please try again."

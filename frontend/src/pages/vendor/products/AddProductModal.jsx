@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import axios from "axios"; // Import axios for API requests
 
-const AddProductModal = ({
-  show,
-  handleClose,
-  handleAddProduct,
-  categories,
-}) => {
+const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
+  const [categories, setCategories] = useState([]); // State to hold categories
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -17,6 +14,30 @@ const AddProductModal = ({
   const [inventoryCount, setInventoryCount] = useState(0);
   const [lowStockAlert, setLowStockAlert] = useState(0);
   const [imageUrl, setImageUrl] = useState("");
+
+  // Fetch categories when the modal is opened
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://localhost:7282/api/category",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("vendor_token")}`,
+            },
+          }
+        );
+        setCategories(response.data); // Set categories to state
+      } catch (error) {
+        console.error("Error fetching categories", error);
+      }
+    };
+
+    if (show) {
+      // Only fetch when modal is opened
+      fetchCategories();
+    }
+  }, [show]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +68,8 @@ const AddProductModal = ({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // Create a new product object
     const newProduct = {
       name: productName,
       description,
@@ -58,8 +80,18 @@ const AddProductModal = ({
       images: [imageUrl], // Add image URL directly
     };
 
-    handleAddProduct(newProduct);
-    handleClose();
+    try {
+      await axios.post("https://localhost:7282/api/product", newProduct, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("vendor_token")}`,
+          "Content-Type": "application/json",
+        },
+      });
+      handleAddProduct(newProduct); // Notify parent component of new product
+      handleClose(); // Close the modal after submission
+    } catch (error) {
+      console.error("Error adding product", error);
+    }
   };
 
   return (
@@ -80,6 +112,7 @@ const AddProductModal = ({
                   name="productName"
                   value={productName}
                   onChange={handleInputChange}
+                  required
                 />
               </Form.Group>
             </Col>
@@ -92,6 +125,7 @@ const AddProductModal = ({
                   name="price"
                   value={price}
                   onChange={handleInputChange}
+                  required
                 />
               </Form.Group>
             </Col>
@@ -106,13 +140,18 @@ const AddProductModal = ({
                   name="categoryId"
                   value={categoryId}
                   onChange={handleInputChange}
+                  required
                 >
                   <option value="">Select category</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
+                  {categories.length > 0 ? (
+                    categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>No categories available</option>
+                  )}
                 </Form.Control>
               </Form.Group>
             </Col>
@@ -125,6 +164,7 @@ const AddProductModal = ({
                   name="inventoryCount"
                   value={inventoryCount}
                   onChange={handleInputChange}
+                  required
                 />
               </Form.Group>
             </Col>
@@ -140,6 +180,7 @@ const AddProductModal = ({
                   name="lowStockAlert"
                   value={lowStockAlert}
                   onChange={handleInputChange}
+                  required
                 />
               </Form.Group>
             </Col>
@@ -152,6 +193,7 @@ const AddProductModal = ({
                   name="imageUrl"
                   value={imageUrl}
                   onChange={handleInputChange}
+                  required
                 />
               </Form.Group>
             </Col>
@@ -168,6 +210,7 @@ const AddProductModal = ({
                   name="description"
                   value={description}
                   onChange={handleInputChange}
+                  required
                 />
               </Form.Group>
             </Col>
