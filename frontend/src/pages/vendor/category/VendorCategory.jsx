@@ -27,7 +27,13 @@ const VendorCategory = () => {
             },
           }
         );
-        setCategories(response.data); // Update the categories state with the fetched data
+
+        // Sort the categories array by _id in descending order (latest first)
+        const sortedCategories = response.data.sort((a, b) =>
+          a._id < b._id ? 1 : -1
+        );
+
+        setCategories(sortedCategories); // Update the categories state with the sorted data
         setLoading(false);
       } catch (error) {
         setError("Failed to fetch categories");
@@ -137,7 +143,7 @@ const VendorCategory = () => {
         show={openAddCategoryModal}
         handleClose={() => setOpenAddCategoryModal(false)}
         handleAddCategory={(newCategory) => {
-          setCategories([...categories, newCategory]);
+          setCategories([newCategory, ...categories]); // Prepend the new category to show it at the top
           setOpenAddCategoryModal(false);
         }}
       />

@@ -1,14 +1,154 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Layout from "../layout";
 
 const VendorDashboard = () => {
+  const [productsCount, setProductsCount] = useState(0);
+  const [ordersCount, setOrdersCount] = useState(0);
+  const [newOrdersCount, setNewOrdersCount] = useState(0);
+  const [totalSales, setTotalSales] = useState(0);
+  const [reviewsCount, setReviewsCount] = useState(0);
+  const [orderStatusCounts, setOrderStatusCounts] = useState({});
+  const [topSellingProducts, setTopSellingProducts] = useState([]);
+
+  // Possible order statuses
+  const possibleStatuses = ["Processing", "Delivered", "Completed", "Canceled"];
+
+  // Fetch products by vendor_id and count
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const vendorId = localStorage.getItem("vendor_id");
+      const token = localStorage.getItem("vendor_token");
+
+      try {
+        const response = await axios.get(
+          `https://localhost:7282/api/product/vendor/${vendorId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setProductsCount(response.data.length); // Count the number of products
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Fetch orders by vendor_id and count
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const vendorId = localStorage.getItem("vendor_id");
+      const token = localStorage.getItem("vendor_token");
+
+      try {
+        const response = await axios.get(
+          `https://localhost:7282/api/order/orderItems/${vendorId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const orders = response.data;
+
+          // Count total sales (completed orders)
+          const completedOrders = orders.filter(
+            (order) => order.status === "Completed"
+          );
+          setTotalSales(completedOrders.length);
+
+          // Count new orders (processing status)
+          const processingOrders = orders.filter(
+            (order) => order.status === "Processing"
+          );
+          setNewOrdersCount(processingOrders.length);
+
+          // Set total orders count
+          setOrdersCount(orders.length);
+
+          // Calculate order status distribution
+          const statusCounts = orders.reduce((acc, order) => {
+            acc[order.status] = (acc[order.status] || 0) + 1;
+            return acc;
+          }, {});
+
+          // Ensure all possible statuses are present in the statusCounts
+          possibleStatuses.forEach((status) => {
+            if (!statusCounts[status]) {
+              statusCounts[status] = 0;
+            }
+          });
+
+          setOrderStatusCounts(statusCounts);
+
+          // Calculate top-selling products by quantity sold
+          const productSales = orders.reduce((acc, order) => {
+            if (!acc[order.name]) {
+              acc[order.name] = { quantity: 0, image: order.images[0] };
+            }
+            acc[order.name].quantity += order.quantity;
+            return acc;
+          }, {});
+          const topProducts = Object.entries(productSales)
+            .sort((a, b) => b[1].quantity - a[1].quantity)
+            .slice(0, 5); // Get top 5 products
+          setTopSellingProducts(topProducts);
+        }
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  // Fetch vendor ratings and reviews count
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      const vendorId = localStorage.getItem("vendor_id");
+      const token = localStorage.getItem("vendor_token");
+
+      try {
+        const response = await axios.get(
+          `https://localhost:7282/api/vendor/${vendorId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const vendorData = response.data;
+
+          // Directly get total reviews from the ratings object
+          const totalReviews = vendorData.ratings.totalReviews || 0;
+          setReviewsCount(totalReviews);
+        }
+      } catch (error) {
+        console.error("Failed to fetch vendor data:", error);
+      }
+    };
+
+    fetchVendorData();
+  }, []);
+
   return (
     <Layout
       pageTitle="Vendor Dashboard"
       icon="bi bi-house-door"
       breadcrumb="Dashboard"
     >
-      <div className="container-fluid mt-4">
+      <div
+        className="container-fluid mt-4"
+        style={{ backgroundColor: "#f0f0f0", padding: "30px" }}
+      >
         <br />
         <br />
 
@@ -21,7 +161,7 @@ const VendorDashboard = () => {
             >
               <i className="bi bi-box-seam fs-2 text-primary mb-3"></i>
               <h5 className="text-dark">Total Products</h5>
-              <h2 className="text-primary">58</h2>
+              <h2 className="text-primary">{productsCount}</h2>
             </div>
           </div>
           <div className="col-md-3">
@@ -30,8 +170,8 @@ const VendorDashboard = () => {
               style={{ borderRadius: "0px" }}
             >
               <i className="bi bi-currency-dollar fs-2 text-success mb-3"></i>
-              <h5 className="text-dark">Total Sales</h5>
-              <h2 className="text-success">$12,500</h2>
+              <h5 className="text-dark">Completed Orders</h5>
+              <h2 className="text-success">{totalSales}</h2>
             </div>
           </div>
           <div className="col-md-3">
@@ -41,7 +181,7 @@ const VendorDashboard = () => {
             >
               <i className="bi bi-cart fs-2 text-warning mb-3"></i>
               <h5 className="text-dark">New Orders</h5>
-              <h2 className="text-warning">15</h2>
+              <h2 className="text-warning">{newOrdersCount}</h2>
             </div>
           </div>
           <div className="col-md-3">
@@ -51,80 +191,74 @@ const VendorDashboard = () => {
             >
               <i className="bi bi-chat-left-text fs-2 text-info mb-3"></i>
               <h5 className="text-dark">Customer Reviews</h5>
-              <h2 className="text-info">120</h2>
+              <h2 className="text-info">{reviewsCount}</h2>
             </div>
           </div>
         </div>
 
         <br />
         <br />
-        {/* Sales Overview Section */}
+        {/* Order Status Distribution Section */}
         <div className="row">
-          <div className="col-md-8 mb-4">
+          <div className="col-md-6 mb-4">
             <div
               className="card p-4 shadow-sm bg-white"
               style={{ borderRadius: "0px" }}
             >
-              <h5 className="mb-2 text-dark">Sales Overview (Per Product)</h5>
+              <h5 className="mb-2 text-dark">Order Status Distribution</h5>
               <hr />
               <div className="mt-2 d-flex flex-column">
-                {["Product A", "Product B", "Product C", "Product D"].map(
-                  (product, index) => {
-                    const percentages = [75, 50, 90, 60];
-                    return (
-                      <div className="mb-3" key={index}>
-                        <div className="d-flex justify-content-between">
-                          <span>{product}</span>
-                          <span>{percentages[index]}%</span>
-                        </div>
-                        <div className="progress">
-                          <div
-                            className="progress-bar bg-primary"
-                            role="progressbar"
-                            style={{ width: `${percentages[index]}%` }}
-                            aria-valuenow={percentages[index]}
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                    );
-                  }
-                )}
+                {possibleStatuses.map((status, index) => (
+                  <div className="mb-3" key={index}>
+                    <div className="d-flex justify-content-between">
+                      <span>{status}</span>
+                      <span>{orderStatusCounts[status] || 0}</span>
+                    </div>
+                    <div className="progress">
+                      <div
+                        className="progress-bar bg-primary"
+                        role="progressbar"
+                        style={{
+                          width: `${
+                            (orderStatusCounts[status] / ordersCount) * 100 || 0
+                          }%`,
+                        }}
+                        aria-valuenow={
+                          (orderStatusCounts[status] / ordersCount) * 100 || 0
+                        }
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Review Distribution Section */}
-          <div className="col-md-4 mb-4">
+          {/* Top Selling Products Section */}
+          <div className="col-md-6 mb-4">
             <div
               className="card p-4 shadow-sm bg-white"
               style={{ borderRadius: "0px" }}
             >
-              <h5 className="mb-2 text-dark">Review Distribution</h5>
+              <h5 className="mb-2 text-dark">Top Selling Products</h5>
               <hr />
               <div className="mt-2 d-flex flex-column">
-                {[
-                  { stars: "5 Stars", percentage: 60 },
-                  { stars: "4 Stars", percentage: 25 },
-                  { stars: "3 Stars", percentage: 10 },
-                  { stars: "2 Stars", percentage: 3 },
-                  { stars: "1 Star", percentage: 2 },
-                ].map((review, index) => (
+                {topSellingProducts.map(([product, data], index) => (
                   <div className="mb-3" key={index}>
-                    <div className="d-flex justify-content-between">
-                      <span>{review.stars}</span>
-                      <span>{review.percentage}%</span>
-                    </div>
-                    <div className="progress">
-                      <div
-                        className="progress-bar bg-info"
-                        role="progressbar"
-                        style={{ width: `${review.percentage}%` }}
-                        aria-valuenow={review.percentage}
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span>{product}</span>
+                      <img
+                        src={data.image || "https://via.placeholder.com/50"}
+                        alt={product}
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <span>{data.quantity} sold</span>
                     </div>
                   </div>
                 ))}

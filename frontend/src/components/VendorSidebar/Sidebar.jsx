@@ -82,15 +82,6 @@ const VendorSidebar = () => {
                 <span style={{ paddingLeft: "0.7rem" }}>Order Management</span>
               </Link>
             </li>
-            <li className={activeItem === "/vendor/profile" ? "active" : ""}>
-              <Link
-                to="/vendor/profile"
-                className="text-decoration-none px-3 py-2 d-block"
-              >
-                <i class="bi bi-person-circle"></i>
-                <span style={{ paddingLeft: "0.7rem" }}>Vendor Profile</span>
-              </Link>
-            </li>
             <li className={activeItem === "/vendor/rates" ? "active" : ""}>
               <Link
                 to="/vendor/rates"
@@ -98,6 +89,15 @@ const VendorSidebar = () => {
               >
                 <i class="bi bi-star-half"></i>
                 <span style={{ paddingLeft: "0.7rem" }}>Rate and Reviews</span>
+              </Link>
+            </li>
+            <li className={activeItem === "/vendor/profile" ? "active" : ""}>
+              <Link
+                to="/vendor/profile"
+                className="text-decoration-none px-3 py-2 d-block"
+              >
+                <i class="bi bi-person-circle"></i>
+                <span style={{ paddingLeft: "0.7rem" }}>Vendor Profile</span>
               </Link>
             </li>
           </ul>

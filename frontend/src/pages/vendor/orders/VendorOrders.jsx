@@ -1,43 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../layout";
 import DataTable from "react-data-table-component";
 import ViewOrderModal from "./ViewOrderModal"; // Import the ViewOrderModal
-
-// Sample response for orders
-const sampleOrders = [
-  {
-    id: "67002704266a87a05bc166a0",
-    productId: "66fc631eb675929162618440",
-    name: "IPhone X",
-    quantity: 1,
-    price: 500,
-    status: "Canceled",
-    images: [],
-  },
-  {
-    id: "67004857ae07389cecbeca18",
-    productId: "6700481bae07389cecbeca17",
-    name: "Laptop 1",
-    quantity: 1,
-    price: 204000,
-    status: "Processing",
-    images: ["image_1.jpg", "image_2.jpg"],
-  },
-  {
-    id: "6701a2aad819e459f8e91abc",
-    productId: "6700481bae07389cecbeca17",
-    name: "Laptop 1",
-    quantity: 1,
-    price: 204000,
-    status: "Processing",
-    images: ["image_1.jpg", "image_2.jpg"],
-  },
-];
+import UpdateOrderModal from "./UpdateOrderModal"; // Import the UpdateOrderModal
+import axios from "axios"; // Import Axios for API requests
 
 const VendorOrders = () => {
-  const [orders, setOrders] = useState(sampleOrders); // Orders state
+  const [orders, setOrders] = useState([]); // Orders state
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
   const [selectedOrder, setSelectedOrder] = useState(null); // Selected order for viewing
-  const [openViewModal, setOpenViewModal] = useState(false); // Modal state
+  const [openViewModal, setOpenViewModal] = useState(false); // View modal state
+  const [openUpdateModal, setOpenUpdateModal] = useState(false); // Update modal state
+
+  // Fetch orders by vendor_id when the component mounts
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const vendorId = localStorage.getItem("vendor_id"); // Get vendor ID from local storage
+      const token = localStorage.getItem("vendor_token"); // Get token from local storage
+
+      try {
+        const response = await axios.get(
+          `https://localhost:7282/api/order/orderItems/${vendorId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Pass token in headers
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          // Sort the orders by _id in descending order (latest first)
+          const sortedOrders = response.data.sort((a, b) =>
+            a._id < b._id ? 1 : -1
+          );
+
+          setOrders(sortedOrders); // Set the sorted orders
+        }
+        setLoading(false); // Disable loading state after fetching
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+        setError("Failed to load orders. Please try again.");
+        setLoading(false); // Disable loading state on error
+      }
+    };
+
+    fetchOrders();
+  }, []); // Empty dependency array to ensure it runs only once on mount
 
   const columns = [
     {
@@ -84,7 +93,7 @@ const VendorOrders = () => {
           </button>
           <button
             className="btn btn-success ms-2"
-            onClick={() => handleViewOrderModal(row)}
+            onClick={() => handleUpdateOrderModal(row)}
           >
             <i className="bi bi-pencil-square"></i>
           </button>
@@ -98,7 +107,20 @@ const VendorOrders = () => {
 
   const handleViewOrderModal = (order) => {
     setSelectedOrder(order); // Set the selected order
-    setOpenViewModal(true); // Open the modal
+    setOpenViewModal(true); // Open the view modal
+  };
+
+  const handleUpdateOrderModal = (order) => {
+    setSelectedOrder(order); // Set the selected order
+    setOpenUpdateModal(true); // Open the update modal
+  };
+
+  const handleUpdateOrder = (updatedOrder) => {
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === updatedOrder.id ? updatedOrder : order
+      )
+    ); // Update the orders state with the new status
   };
 
   return (
@@ -107,30 +129,38 @@ const VendorOrders = () => {
       icon="bi bi-person-circle"
       breadcrumb="Vendor Orders"
     >
+      <br />
+      <br />
       {/* Data Table */}
       <div className="col-md-12" style={{ backgroundColor: "#f0f0f0" }}>
-        <DataTable
-          customStyles={{
-            headCells: {
-              style: {
-                fontSize: "16px",
-                fontWeight: "bold",
-                backgroundColor: "#e0e0e0",
+        {loading ? (
+          <p>Loading orders...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <DataTable
+            customStyles={{
+              headCells: {
+                style: {
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  backgroundColor: "#e0e0e0",
+                },
               },
-            },
-            cells: {
-              style: {
-                fontSize: "15px",
+              cells: {
+                style: {
+                  fontSize: "15px",
+                },
               },
-            },
-          }}
-          columns={columns}
-          data={orders}
-          pagination={true}
-          paginationPerPage={5}
-          paginationRowsPerPageOptions={[5, 10, 15, 20, 25, 30]}
-          noDataComponent="No Orders Found"
-        />
+            }}
+            columns={columns}
+            data={orders}
+            pagination={true}
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[10, 20, 30, 40, 50]}
+            noDataComponent="No Orders Found"
+          />
+        )}
       </div>
 
       {/* View Order Modal */}
@@ -139,6 +169,16 @@ const VendorOrders = () => {
           show={openViewModal}
           handleClose={() => setOpenViewModal(false)}
           order={selectedOrder} // Pass the selected order details
+        />
+      )}
+
+      {/* Update Order Modal */}
+      {selectedOrder && (
+        <UpdateOrderModal
+          show={openUpdateModal}
+          handleClose={() => setOpenUpdateModal(false)}
+          order={selectedOrder}
+          handleUpdateOrder={handleUpdateOrder} // Handle order update
         />
       )}
     </Layout>

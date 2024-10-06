@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../layout";
 import DataTable from "react-data-table-component";
-import axios from "axios"; // Import Axios for API requests
-import UserProfileImg from "../../../images/vendor.png"; // Import user profile image
+import axios from "axios";
+import UserProfileImg from "../../../images/user2.png";
+import UserProfileImg2 from "../../../images/user1.png";
 
 const VendorRates = () => {
   const [ratings, setRatings] = useState(null); // Vendor rating information
@@ -77,16 +78,15 @@ const VendorRates = () => {
     },
     {
       name: "Customer",
-      cell: (row) => (
+      cell: (row, index) => (
         <div className="d-flex align-items-center">
           <img
-            src={UserProfileImg}
+            src={index % 2 === 0 ? UserProfileImg : UserProfileImg2} // Alternate between the two images based on index
             alt="User"
             className="rounded-circle"
             style={{ width: "40px", height: "40px", marginRight: "10px" }}
           />
           <span>Customer</span>{" "}
-          {/* Replace this with the actual customer name if available */}
         </div>
       ),
       sortable: false,
@@ -139,9 +139,12 @@ const VendorRates = () => {
 
         {/* Display comments */}
         <div key={"All Comments"} className="mb-4">
-          <h4 style={{ fontSize: "20px", fontWeight: "500", color: "#333" }}>
-            All Comments
-          </h4>
+          <h5
+            style={{ fontSize: "20px", fontWeight: "500", color: "#333" }}
+            className="mb-3"
+          >
+            Comments by Customers
+          </h5>
           {groupedComments["All Comments"]?.length > 0 ? (
             <DataTable
               columns={columns}

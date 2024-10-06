@@ -29,7 +29,13 @@ const VendorProducts = () => {
             },
           }
         );
-        setProducts(response.data); // Set the products from API response
+
+        // Sort the products array by _id in descending order (latest first)
+        const sortedProducts = response.data.sort((a, b) =>
+          a._id < b._id ? 1 : -1
+        );
+
+        setProducts(sortedProducts); // Set the sorted products from API response
         setLoading(false);
       } catch (error) {
         setError("Failed to fetch products");
@@ -235,7 +241,8 @@ const VendorProducts = () => {
         show={openAddProductModal}
         handleClose={() => setOpenAddProductModal(false)}
         handleAddProduct={(newProduct) => {
-          setProducts((prevProducts) => [...prevProducts, newProduct]); // Add the new product to the list
+          // Prepend new product to show it at the top
+          setProducts((prevProducts) => [newProduct, ...prevProducts]);
           setOpenAddProductModal(false);
         }}
       />
