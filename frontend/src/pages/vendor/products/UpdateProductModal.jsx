@@ -9,11 +9,11 @@ const UpdateProductModal = ({
   handleClose,
   handleUpdateProduct,
   product,
-  categories,
+  categories = [], // Add default value to prevent undefined error
 }) => {
   const [productName, setProductName] = useState(product?.name || "");
   const [description, setDescription] = useState(product?.description || "");
-  const [categoryId, setCategoryId] = useState(product?.categoryId || "");
+  const [categoryId, setCategoryId] = useState(product?.category?.id || "");
   const [price, setPrice] = useState(product?.price || 0);
   const [inventoryCount, setInventoryCount] = useState(
     product?.inventoryCount || 0
@@ -27,7 +27,7 @@ const UpdateProductModal = ({
     if (product) {
       setProductName(product.name);
       setDescription(product.description);
-      setCategoryId(product.categoryId);
+      setCategoryId(product.category?.id || "");
       setPrice(product.price);
       setInventoryCount(product.inventoryCount);
       setLowStockAlert(product.lowStockAlert);
@@ -126,11 +126,12 @@ const UpdateProductModal = ({
                   onChange={handleInputChange}
                 >
                   <option value="">Select category</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
+                  {categories.length > 0 &&
+                    categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
                 </Form.Control>
               </Form.Group>
             </Col>

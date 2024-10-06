@@ -60,7 +60,7 @@ const VendorCategory = () => {
       selector: (row) => row.name,
       sortable: true,
       style: {
-        fontSize: "16px",
+        fontSize: "15px",
       },
     },
     {
@@ -73,7 +73,7 @@ const VendorCategory = () => {
         ),
       sortable: true,
       style: {
-        fontSize: "16px",
+        fontSize: "15px",
       },
     },
     {
@@ -130,14 +130,14 @@ const VendorCategory = () => {
             customStyles={{
               headCells: {
                 style: {
-                  fontSize: "18px",
+                  fontSize: "16px",
                   fontWeight: "bold",
                   backgroundColor: "#e0e0e0",
                 },
               },
               cells: {
                 style: {
-                  fontSize: "16px",
+                  fontSize: "15px",
                 },
               },
             }}

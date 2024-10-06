@@ -80,7 +80,7 @@ const VendorProducts = () => {
       selector: (row) => row.name,
       sortable: true,
       style: {
-        fontSize: "16px",
+        fontSize: "15px",
       },
     },
     {
@@ -90,7 +90,7 @@ const VendorProducts = () => {
         row.category && row.category.name ? row.category.name : "Uncategorized",
       sortable: true,
       style: {
-        fontSize: "16px",
+        fontSize: "15px",
       },
     },
     {
@@ -98,7 +98,7 @@ const VendorProducts = () => {
       selector: (row) => `$${row.price.toFixed(2)}`,
       sortable: true,
       style: {
-        fontSize: "16px",
+        fontSize: "15px",
       },
     },
     {
@@ -106,7 +106,7 @@ const VendorProducts = () => {
       selector: (row) => row.inventoryCount,
       sortable: true,
       style: {
-        fontSize: "16px",
+        fontSize: "15px",
       },
     },
     {
@@ -157,14 +157,14 @@ const VendorProducts = () => {
             customStyles={{
               headCells: {
                 style: {
-                  fontSize: "18px",
+                  fontSize: "16px",
                   fontWeight: "bold",
                   backgroundColor: "#e0e0e0",
                 },
               },
               cells: {
                 style: {
-                  fontSize: "16px",
+                  fontSize: "15px",
                 },
               },
             }}
