@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../layout";
 import DataTable from "react-data-table-component";
 import axios from "axios"; // Import Axios
+import Swal from "sweetalert2"; // Import SweetAlert
 import UpdateProductModal from "./UpdateProductModal"; // Import the UpdateProductModal
 import AddProductModal from "./AddProductModal"; // Import the AddProductModal
 
@@ -40,9 +41,42 @@ const VendorProducts = () => {
   }, []); // Empty dependency array ensures it runs only once on mount
 
   const handleDeleteProduct = (id) => {
-    const updatedProducts = products.filter((product) => product.id !== id);
-    setProducts(updatedProducts);
-    console.log("Product deleted:", id);
+    // Show confirmation dialog using SweetAlert
+    Swal.fire({
+      title: "Delete Product?",
+      text: "This will delete the Product permanently!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#545454",
+      confirmButtonText: "Delete",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const token = localStorage.getItem("vendor_token");
+
+        // Call the API to delete the product
+        axios
+          .delete(`https://localhost:7282/api/product/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then(() => {
+            const updatedProducts = products.filter(
+              (product) => product.id !== id
+            );
+            setProducts(updatedProducts); // Update state after deletion
+            Swal.fire("Deleted!", "Your product has been deleted.", "success");
+          })
+          .catch((error) => {
+            Swal.fire(
+              "Error!",
+              "There was a problem deleting the product.",
+              "error"
+            );
+          });
+      }
+    });
   };
 
   const handleUpdateStockModalOpen = (product) => {
