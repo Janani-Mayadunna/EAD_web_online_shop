@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import "./bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import Router from './routes/routes';

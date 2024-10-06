@@ -3,49 +3,49 @@ h1 {
   font-family: "DM Sans", sans-serif;
   font-size: 3rem;
   font-weight: 700;
-  color: #08781f;
+  color: #2c302c;
 }
 
 h2 {
   font-family: "DM Sans", sans-serif;
   font-size: 2rem;
   font-weight: 700;
-  color: #08781f;
+  color: #2c302c;
 }
 
 h3 {
   font-family: "DM Sans", sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #08781f;
+  color: #2c302c;
 }
 
 h4 {
   font-family: "DM Sans", sans-serif;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #08781f;
+  color: #2c302c;
 }
 
 h5 {
   font-family: "DM Sans", sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #08781f;
+  color: #2c302c;
 }
 
 h6 {
   font-family: "DM Sans", sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #08781f;
+  color: #2c302c;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap");
 
 /* p {
   font-family: "Caveat", cursive;
-  color: #08781f;
+  color: #2c302c;
 } */
 
 body {
