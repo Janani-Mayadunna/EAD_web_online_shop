@@ -1,10 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../layout";
-import VendorImg from "../../../images/vendor.png"; // Importing vendor image
+import VendorImg from "../../../images/vendor.png";
+import axios from "axios"; // Import Axios for API requests
 
 const VendorProfile = () => {
-  const [username, setUsername] = useState("Sahan Perera"); // Initial username from response
-  const [isEditing, setIsEditing] = useState(false); // State to control edit mode
+  const [username, setUsername] = useState(""); // Username state
+  const [email, setEmail] = useState(""); // Email state
+  const [role, setRole] = useState(""); // Role state
+  const [status, setStatus] = useState("Active"); // Status (default to "Active")
+  const [isEditing, setIsEditing] = useState(false); // Edit mode control
+  const [error, setError] = useState(""); // Error state
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userId = localStorage.getItem("user_id"); // Retrieve user_id from local storage
+      const token = localStorage.getItem("vendor_token"); // Retrieve token from local storage
+
+      try {
+        const response = await axios.get(
+          `https://localhost:7282/api/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const { username, email, role } = response.data;
+          setUsername(username);
+          setEmail(email);
+          setRole(role);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+        setError("Failed to load user data. Please try again.");
+      }
+    };
+
+    fetchUserData();
+  }, []); // Run this effect only once when the component mounts
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -14,11 +50,33 @@ const VendorProfile = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    // Make API call to update username
-    const updatedUser = { username }; // Send updated username in the request
-    console.log("Updating username to:", updatedUser);
-    setIsEditing(false); // Exit edit mode after saving
+  const handleSaveClick = async () => {
+    const userId = localStorage.getItem("user_id"); // Get user ID from local storage
+    const token = localStorage.getItem("vendor_token"); // Get token from local storage
+
+    const updatedUser = { username }; // Prepare the updated username
+
+    try {
+      // Make the API request to update the username
+      const response = await axios.put(
+        `https://localhost:7282/api/user`,
+        updatedUser,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Username updated successfully");
+        setIsEditing(false); // Exit edit mode after saving
+      }
+    } catch (error) {
+      console.error("Failed to update username:", error);
+      setError("Failed to update username. Please try again.");
+    }
   };
 
   return (
@@ -28,10 +86,8 @@ const VendorProfile = () => {
       breadcrumb="Vendor Profile"
     >
       <div
-        className="col-md-12 d-flex flex-column align-items-center "
-        style={{
-          backgroundColor: "#f0f0f0",
-        }}
+        className="col-md-12 d-flex flex-column align-items-center"
+        style={{ backgroundColor: "#f0f0f0" }}
       >
         <br />
         {/* Vendor Image */}
@@ -52,6 +108,7 @@ const VendorProfile = () => {
         {/* Vendor Details */}
         <div className="col-md-8">
           <form>
+            {error && <p className="text-danger">{error}</p>}
             {/* Username Field with Pencil Icon */}
             <div className="form-group mb-4">
               <label htmlFor="username" className="form-label fw-bold">
@@ -96,7 +153,7 @@ const VendorProfile = () => {
                 type="text"
                 className="form-control"
                 id="email"
-                value="customer@gmail.com"
+                value={email}
                 readOnly
                 style={{ fontSize: "15px" }} // Setting font size to 15px
               />
@@ -110,7 +167,7 @@ const VendorProfile = () => {
                 type="text"
                 className="form-control"
                 id="role"
-                value="Customer"
+                value={role}
                 readOnly
                 style={{ fontSize: "15px" }} // Setting font size to 15px
               />
@@ -124,7 +181,7 @@ const VendorProfile = () => {
                 type="text"
                 className="form-control"
                 id="status"
-                value="Active"
+                value={status}
                 readOnly
                 style={{ fontSize: "15px" }} // Setting font size to 15px
               />

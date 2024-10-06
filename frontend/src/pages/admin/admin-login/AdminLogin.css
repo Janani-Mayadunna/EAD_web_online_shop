@@ -86,3 +86,10 @@ p {
 .forgot-password a:hover {
   text-decoration: underline;
 }
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}

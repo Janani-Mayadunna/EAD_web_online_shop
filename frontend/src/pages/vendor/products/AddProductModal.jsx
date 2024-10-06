@@ -14,6 +14,7 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
   const [inventoryCount, setInventoryCount] = useState(0);
   const [lowStockAlert, setLowStockAlert] = useState(0);
   const [imageUrl, setImageUrl] = useState("");
+  const [errors, setErrors] = useState({}); // Validation error state
 
   // Fetch categories when the modal is opened
   useEffect(() => {
@@ -41,6 +42,7 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: null })); // Clear errors on change
     switch (name) {
       case "productName":
         setProductName(value);
@@ -68,7 +70,42 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
     }
   };
 
-  const handleSubmit = async () => {
+  const validateForm = () => {
+    let validationErrors = {};
+
+    if (!productName.trim()) {
+      validationErrors.productName = "Product name is required.";
+    }
+    if (!description.trim()) {
+      validationErrors.description = "Description is required.";
+    }
+    if (!categoryId) {
+      validationErrors.categoryId = "Please select a category.";
+    }
+    if (!price || price <= 0) {
+      validationErrors.price = "Price must be a positive number.";
+    }
+    if (!inventoryCount || inventoryCount < 0) {
+      validationErrors.inventoryCount = "Inventory count must be 0 or more.";
+    }
+    if (!lowStockAlert || lowStockAlert < 0) {
+      validationErrors.lowStockAlert = "Low stock alert must be 0 or more.";
+    }
+    if (!imageUrl.trim()) {
+      validationErrors.imageUrl = "Image URL is required.";
+    }
+
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    if (!validateForm()) {
+      return; // Exit if form validation fails
+    }
+
     // Create a new product object
     const newProduct = {
       name: productName,
@@ -101,7 +138,7 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
       </Modal.Header>
 
       <Modal.Body>
-        <Form className="col-md-11 mx-auto">
+        <Form className="col-md-11 mx-auto" onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col>
               <Form.Group controlId="productName">
@@ -112,8 +149,12 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="productName"
                   value={productName}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.productName}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.productName}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
@@ -125,8 +166,12 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="price"
                   value={price}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.price}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.price}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -140,6 +185,7 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="categoryId"
                   value={categoryId}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.categoryId}
                   required
                 >
                   <option value="">Select category</option>
@@ -153,6 +199,9 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                     <option disabled>No categories available</option>
                   )}
                 </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.categoryId}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
@@ -164,8 +213,12 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="inventoryCount"
                   value={inventoryCount}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.inventoryCount}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.inventoryCount}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -180,8 +233,12 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="lowStockAlert"
                   value={lowStockAlert}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.lowStockAlert}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.lowStockAlert}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
@@ -193,8 +250,12 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="imageUrl"
                   value={imageUrl}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.imageUrl}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.imageUrl}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -210,26 +271,30 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="description"
                   value={description}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.description}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.description}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
+
+          <Modal.Footer>
+            <button type="submit" className="btn btn-success">
+              Add Product
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={handleClose}
+            >
+              Close
+            </button>
+          </Modal.Footer>
         </Form>
       </Modal.Body>
-
-      <Modal.Footer>
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={handleSubmit}
-        >
-          Add Product
-        </button>
-        <button className="btn btn-danger" onClick={handleClose}>
-          Close
-        </button>
-      </Modal.Footer>
     </Modal>
   );
 };

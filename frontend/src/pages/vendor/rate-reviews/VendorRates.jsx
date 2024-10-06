@@ -1,66 +1,95 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../layout";
 import DataTable from "react-data-table-component";
-
-// Sample data structure for vendor comments and ratings
-const vendorData = {
-  id: "66f99b15892861de49191009",
-  name: "vendor",
-  ratings: {
-    average: 4.5,
-    totalReviews: 2,
-  },
-  comments: [
-    {
-      customerId: "66f9982c453ac048b63062db",
-      productId: "66fc631eb675929162618440",
-      productName: "IPhone X",
-      comment: "Goooood!",
-      createdAt: "2024-10-05T11:30:08.011Z",
-    },
-    {
-      customerId: "67012396a76881616c43acad",
-      productId: "6700481bae07389cecbeca17",
-      productName: "Laptop 1",
-      comment: "Shape",
-      createdAt: "2024-10-05T11:32:30.39Z",
-    },
-  ],
-};
-
-// Function to render stars for ratings
-const renderStars = (rating) => {
-  const stars = [];
-  for (let i = 1; i <= 5; i++) {
-    stars.push(
-      <i
-        key={i}
-        className={`bi bi-star${i <= rating ? "-fill" : ""}`}
-        style={{ color: "#FFD700", fontSize: "1.2rem", marginRight: "2px" }}
-      ></i>
-    );
-  }
-  return stars;
-};
+import axios from "axios"; // Import Axios for API requests
+import UserProfileImg from "../../../images/vendor.png"; // Import user profile image
 
 const VendorRates = () => {
-  const { ratings, comments } = vendorData;
+  const [ratings, setRatings] = useState(null); // Vendor rating information
+  const [groupedComments, setGroupedComments] = useState({}); // Grouped comments by product
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Grouping comments by product for better structuring
-  const groupedComments = comments.reduce((acc, comment) => {
-    if (!acc[comment.productName]) {
-      acc[comment.productName] = [];
+  // Fetch vendor comments and ratings
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      const vendorId = localStorage.getItem("vendor_id"); // Retrieve vendor_id from localStorage
+      const token = localStorage.getItem("vendor_token"); // Retrieve token from localStorage
+
+      try {
+        const response = await axios.get(
+          `https://localhost:7282/api/vendor/${vendorId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const vendorData = response.data;
+          console.log("Vendor data:", vendorData);
+          setRatings(vendorData.ratings);
+
+          // Grouping comments by product name
+          const grouped = vendorData.comments.reduce((acc, comment) => {
+            if (!acc["All Comments"]) {
+              acc["All Comments"] = [];
+            }
+            acc["All Comments"].push(comment);
+            return acc;
+          }, {});
+
+          setGroupedComments(grouped);
+          setLoading(false);
+        }
+      } catch (error) {
+        setError("Failed to fetch vendor data.");
+        setLoading(false);
+      }
+    };
+
+    fetchVendorData();
+  }, []);
+
+  // Function to render stars for ratings
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <i
+          key={i}
+          className={`bi bi-star${i <= rating ? "-fill" : ""}`}
+          style={{ color: "#FFD700", fontSize: "1.2rem", marginRight: "2px" }}
+        ></i>
+      );
     }
-    acc[comment.productName].push(comment);
-    return acc;
-  }, {});
+    return stars;
+  };
 
-  // Columns for the data table
+  // DataTable columns definition
   const columns = [
     {
-      name: "Customer ID",
-      selector: (row) => row.customerId,
-      sortable: true,
+      name: "ID",
+      selector: (row, index) => index + 1, // Display a sequential ID
+      sortable: false,
+      width: "80px",
+    },
+    {
+      name: "Customer",
+      cell: (row) => (
+        <div className="d-flex align-items-center">
+          <img
+            src={UserProfileImg}
+            alt="User"
+            className="rounded-circle"
+            style={{ width: "40px", height: "40px", marginRight: "10px" }}
+          />
+          <span>Customer</span>{" "}
+          {/* Replace this with the actual customer name if available */}
+        </div>
+      ),
+      sortable: false,
     },
     {
       name: "Comment",
@@ -74,13 +103,23 @@ const VendorRates = () => {
     },
   ];
 
+  if (loading) return <p>Loading data...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <Layout
       pageTitle="Vendor Dashboard"
       icon="bi bi-star-half"
       breadcrumb="Rates & Reviews"
     >
-      <div className="col-md-12"  style={{ backgroundColor: "#f0f0f0", paddingLeft: "20px", paddingRight: "20px" }}>
+      <div
+        className="col-md-12"
+        style={{
+          backgroundColor: "#f0f0f0",
+          paddingLeft: "20px",
+          paddingRight: "20px",
+        }}
+      >
         {/* Display overall vendor rating */}
         <div className="mb-4 text-center">
           <br />
@@ -88,25 +127,27 @@ const VendorRates = () => {
             Overall Vendor Rating
           </p>
           <div className="d-flex justify-content-center align-items-center mb-2">
-            <div>{renderStars(ratings.average)}</div>
+            <div>{renderStars(ratings?.average)}</div>
             <span className="ms-2" style={{ fontSize: "18px", color: "#333" }}>
-              {ratings.average} / 5
+              {ratings?.average} / 5
             </span>
           </div>
           <p style={{ fontSize: "14px", color: "#777" }}>
-            ({ratings.totalReviews} Reviews)
+            ({ratings?.totalReviews} Reviews)
           </p>
         </div>
 
-        {/* Display ratings and comments per product */}
-        {Object.keys(groupedComments).map((productName, index) => (
-          <div key={index} className="mb-4">
-            <h4 style={{ fontSize: "20px", fontWeight: "500", color: "#333" }}>
-              {productName}
-            </h4>
+        {/* Display comments */}
+        <div key={"All Comments"} className="mb-4">
+          <h4 style={{ fontSize: "20px", fontWeight: "500", color: "#333" }}>
+            All Comments
+          </h4>
+          {groupedComments["All Comments"]?.length > 0 ? (
             <DataTable
               columns={columns}
-              data={groupedComments[productName]}
+              data={groupedComments["All Comments"].sort(
+                (a, b) => new Date(b.createdAt) - new Date(a.createdAt) // Sort by date (latest first)
+              )}
               pagination={true}
               paginationPerPage={5}
               customStyles={{
@@ -126,9 +167,12 @@ const VendorRates = () => {
               }}
               noDataComponent="No Reviews Available"
             />
-          </div>
-        ))}
-        <br /><br />
+          ) : (
+            <p>No reviews available</p>
+          )}
+        </div>
+        <br />
+        <br />
       </div>
     </Layout>
   );

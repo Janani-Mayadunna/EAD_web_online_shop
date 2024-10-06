@@ -1,10 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Layout from "../layout";
 import "./CSRLogin.css";
 import Logo from "../../../images/logo.png";
 import BackGroundImage from "../../../images/back3.jpg";
 
 const CSRLogin = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(""); // Reset any previous errors
+
+    const requestBody = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      // First, make the login request
+      const response = await axios.post(
+        "https://localhost:7282/api/auth/login",
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Store token in local storage
+        const token = response.data.token;
+        localStorage.setItem("csr_token", token);
+
+          // Redirect to CSR dashboard
+          navigate("/csr/orders");
+      }
+    } catch (error) {
+      console.log(error.response); // Log the error response for debugging
+      if (error.response) {
+        setError(
+          error.response.data.message || "Failed to login. Please try again."
+        );
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    }
+  };
+
   return (
     <div
       className="vendor-login-container"
@@ -19,7 +67,8 @@ const CSRLogin = () => {
         <img src={Logo} alt="Smaart Store Logo" className="logo" />
         <h2>CSR Login</h2>
         <p>Serve Customers with Confidence</p>
-        <form className="login-form">
+        <form className="login-form" onSubmit={handleLogin}>
+          {error && <p className="error-message">{error}</p>}
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input
@@ -28,6 +77,8 @@ const CSRLogin = () => {
               name="email"
               className="form-control"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -39,6 +90,8 @@ const CSRLogin = () => {
               name="password"
               className="form-control"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>

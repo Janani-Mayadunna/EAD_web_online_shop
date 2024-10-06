@@ -47,13 +47,6 @@ const VendorCategory = () => {
     setOpenUpdateCategoryModal(true);
   };
 
-  const handleDeleteCategory = (id) => {
-    const updatedCategories = categories.filter(
-      (category) => category.id !== id
-    );
-    setCategories(updatedCategories);
-  };
-
   const columns = [
     {
       name: "Category Name",
@@ -85,12 +78,6 @@ const VendorCategory = () => {
             onClick={() => handleUpdateCategoryClick(row)}
           >
             <i className="bi bi-pencil-square"></i>
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => handleDeleteCategory(row.id)}
-          >
-            <i className="bi bi-trash"></i>
           </button>
         </div>
       ),
