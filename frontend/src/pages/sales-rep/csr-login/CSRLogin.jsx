@@ -4,7 +4,7 @@ import axios from "axios";
 import Layout from "../layout";
 import "./CSRLogin.css";
 import Logo from "../../../images/logo.png";
-import BackGroundImage from "../../../images/back3.jpg";
+import BackGroundImage from "../../../images/back19.jpg";
 
 const CSRLogin = () => {
   const [email, setEmail] = useState("");
@@ -38,8 +38,8 @@ const CSRLogin = () => {
         const token = response.data.token;
         localStorage.setItem("csr_token", token);
 
-          // Redirect to CSR dashboard
-          navigate("/csr/orders");
+        // Redirect to CSR dashboard
+        navigate("/csr/orders");
       }
     } catch (error) {
       console.log(error.response); // Log the error response for debugging
@@ -95,7 +95,25 @@ const CSRLogin = () => {
               required
             />
           </div>
-          <button type="submit" className="btn-login">
+          <button
+            type="submit"
+            className="btn-login"
+            style={{
+              backgroundColor: "#72BF78", // Set the background color to light blue
+              color: "#fff", // Text color white
+              border: "none", // Remove border
+              borderRadius: "5px", // Add border radius
+              padding: "10px 20px", // Padding for the button
+              cursor: "pointer", // Pointer on hover
+              transition: "background-color 0.3s ease", // Smooth transition effect on hover
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "#A0D683"; // Darker blue on hover
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "#72BF78"; // Back to light blue when hover ends
+            }}
+          >
             Login
           </button>
         </form>
