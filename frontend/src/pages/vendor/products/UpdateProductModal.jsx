@@ -38,6 +38,7 @@ const UpdateProductModal = ({
           }
         );
         setCategories(response.data); // Set fetched categories to state
+        console.log(response.data); // Debugging: Check if categories are fetched correctly
       } catch (error) {
         console.error("Error fetching categories", error);
       }
@@ -53,13 +54,19 @@ const UpdateProductModal = ({
     if (product) {
       setProductName(product.name);
       setDescription(product.description);
-      setCategoryId(product.category?.id || "");
       setPrice(product.price);
       setInventoryCount(product.inventoryCount);
       setLowStockAlert(product.lowStockAlert);
       setImageUrl(product.images?.[0] || "");
     }
   }, [product]);
+
+  // Update category ID once categories are fetched
+  useEffect(() => {
+    if (categories.length > 0 && product) {
+      setCategoryId(product.category?.id || "");
+    }
+  }, [categories, product]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -200,6 +207,7 @@ const UpdateProductModal = ({
                   as="select"
                   name="categoryId"
                   value={categoryId}
+                  defaultValue={categoryId}
                   onChange={handleInputChange}
                   isInvalid={!!errors.categoryId}
                   required
