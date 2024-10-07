@@ -1,52 +1,60 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../layout";
 import DataTable from "react-data-table-component";
-import ViewOrderModal from "./ViewOrderModal"; // Import the ViewOrderModal
-import UpdateOrderModal from "./UpdateOrderModal"; // Import the UpdateOrderModal
-import axios from "axios"; // Import Axios for API requests
+import ViewOrderModal from "./ViewOrderModal"; 
+import UpdateOrderModal from "./UpdateOrderModal"; 
+import axios from "axios"; 
 
 const VendorOrders = () => {
-  const [orders, setOrders] = useState([]); // Orders state
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const [selectedOrder, setSelectedOrder] = useState(null); // Selected order for viewing
-  const [openViewModal, setOpenViewModal] = useState(false); // View modal state
-  const [openUpdateModal, setOpenUpdateModal] = useState(false); // Update modal state
+  const [orders, setOrders] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const [selectedOrder, setSelectedOrder] = useState(null); 
+  const [openViewModal, setOpenViewModal] = useState(false); 
+  const [openUpdateModal, setOpenUpdateModal] = useState(false); 
 
   // Fetch orders by vendor_id when the component mounts
   useEffect(() => {
     const fetchOrders = async () => {
-      const vendorId = localStorage.getItem("vendor_id"); // Get vendor ID from local storage
-      const token = localStorage.getItem("vendor_token"); // Get token from local storage
+      const vendorId = localStorage.getItem("vendor_id"); 
+      const token = localStorage.getItem("vendor_token"); 
 
       try {
         const response = await axios.get(
           `https://localhost:7282/api/order/orderItems/${vendorId}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Pass token in headers
+              Authorization: `Bearer ${token}`, 
             },
           }
         );
 
         if (response.status === 200) {
-          // Sort the orders by _id in descending order (latest first)
           const sortedOrders = response.data.sort((a, b) =>
             a._id < b._id ? 1 : -1
           );
 
-          setOrders(sortedOrders); // Set the sorted orders
+          setOrders(sortedOrders); 
         }
-        setLoading(false); // Disable loading state after fetching
+        setLoading(false); 
       } catch (error) {
         console.error("Failed to fetch orders:", error);
         setError("Failed to load orders. Please try again.");
-        setLoading(false); // Disable loading state on error
+        setLoading(false); 
       }
     };
 
     fetchOrders();
-  }, []); // Empty dependency array to ensure it runs only once on mount
+  }, []); 
+
+  // Filter orders based on status
+  const deliveredOrders = orders.filter(
+    (order) => order.status === "Delivered"
+  );
+  const canceledOrders = orders.filter((order) => order.status === "Canceled");
+  const processingOrders = orders.filter(
+    (order) => order.status === "Processing"
+  );
 
   const columns = [
     {
@@ -131,7 +139,8 @@ const VendorOrders = () => {
     >
       <br />
       <br />
-      {/* Data Table */}
+      {/* Data Table for Processing Orders */}
+      <h4>New Orders</h4>
       <div className="col-md-12" style={{ backgroundColor: "#f0f0f0" }}>
         {loading ? (
           <p>Loading orders...</p>
@@ -154,11 +163,77 @@ const VendorOrders = () => {
               },
             }}
             columns={columns}
-            data={orders}
+            data={processingOrders}
             pagination={true}
             paginationPerPage={10}
             paginationRowsPerPageOptions={[10, 20, 30, 40, 50]}
-            noDataComponent="No Orders Found"
+            noDataComponent="No Processing Orders Found"
+          />
+        )}
+      </div>
+
+      {/* Data Table for Delivered Orders */}
+      <h4>Delivered Orders</h4>
+      <div className="col-md-12" style={{ backgroundColor: "#f0f0f0" }}>
+        {loading ? (
+          <p>Loading orders...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <DataTable
+            customStyles={{
+              headCells: {
+                style: {
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  backgroundColor: "#e0e0e0",
+                },
+              },
+              cells: {
+                style: {
+                  fontSize: "15px",
+                },
+              },
+            }}
+            columns={columns}
+            data={deliveredOrders}
+            pagination={true}
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[10, 20, 30, 40, 50]}
+            noDataComponent="No Delivered Orders Found"
+          />
+        )}
+      </div>
+
+      {/* Data Table for Canceled Orders */}
+      <h4>Canceled Orders</h4>
+      <div className="col-md-12" style={{ backgroundColor: "#f0f0f0" }}>
+        {loading ? (
+          <p>Loading orders...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <DataTable
+            customStyles={{
+              headCells: {
+                style: {
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  backgroundColor: "#e0e0e0",
+                },
+              },
+              cells: {
+                style: {
+                  fontSize: "15px",
+                },
+              },
+            }}
+            columns={columns}
+            data={canceledOrders}
+            pagination={true}
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[10, 20, 30, 40, 50]}
+            noDataComponent="No Canceled Orders Found"
           />
         )}
       </div>
@@ -168,7 +243,7 @@ const VendorOrders = () => {
         <ViewOrderModal
           show={openViewModal}
           handleClose={() => setOpenViewModal(false)}
-          order={selectedOrder} // Pass the selected order details
+          order={selectedOrder} 
         />
       )}
 
@@ -178,7 +253,7 @@ const VendorOrders = () => {
           show={openUpdateModal}
           handleClose={() => setOpenUpdateModal(false)}
           order={selectedOrder}
-          handleUpdateOrder={handleUpdateOrder} // Handle order update
+          handleUpdateOrder={handleUpdateOrder} 
         />
       )}
     </Layout>
