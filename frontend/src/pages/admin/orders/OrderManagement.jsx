@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import DataTable from 'react-data-table-component';
-import '../../admin/orders/OrderManagement.css';
 import Layout from '../layout';
+import DataTable from 'react-data-table-component';
+import './OrderManagement.css';
 
-const CSROrderDetails = () => {
+const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -20,7 +20,7 @@ const CSROrderDetails = () => {
     try {
       const response = await axios.get('https://localhost:7282/api/order', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('csr_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         },
       });
 
@@ -43,7 +43,7 @@ const CSROrderDetails = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('csr_token')}`,
+            Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
             'Content-Type': 'application/json',
           },
         }
@@ -168,4 +168,4 @@ const CSROrderDetails = () => {
   );
 };
 
-export default CSROrderDetails;
+export default OrderManagement;
