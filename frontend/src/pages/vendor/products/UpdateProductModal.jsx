@@ -4,6 +4,8 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios"; // Axios for API requests
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Firebase imports
+import { storage } from "../../../firebase/firebaseConfig"; // Your Firebase configuration
 
 const UpdateProductModal = ({
   show,
@@ -11,7 +13,7 @@ const UpdateProductModal = ({
   handleUpdateProduct,
   product,
 }) => {
-  const [categories, setCategories] = useState([]); // Fetch categories from API
+  const [categories, setCategories] = useState([]);
   const [productName, setProductName] = useState(product?.name || "");
   const [description, setDescription] = useState(product?.description || "");
   const [categoryId, setCategoryId] = useState(product?.category?.id || "");
@@ -22,8 +24,13 @@ const UpdateProductModal = ({
   const [lowStockAlert, setLowStockAlert] = useState(
     product?.lowStockAlert || 0
   );
+  const [imageFile, setImageFile] = useState(null); // State for image file
   const [imageUrl, setImageUrl] = useState(product?.images?.[0] || "");
-  const [errors, setErrors] = useState({}); // To track validation errors
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(
+    product?.images?.[0] || ""
+  ); // Image preview
+  const [uploadProgress, setUploadProgress] = useState(0); // Progress tracker for image upload
+  const [errors, setErrors] = useState({});
 
   // Fetch categories when the modal is opened
   useEffect(() => {
@@ -37,8 +44,7 @@ const UpdateProductModal = ({
             },
           }
         );
-        setCategories(response.data); // Set fetched categories to state
-        console.log(response.data); // Debugging: Check if categories are fetched correctly
+        setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories", error);
       }
@@ -58,19 +64,57 @@ const UpdateProductModal = ({
       setInventoryCount(product.inventoryCount);
       setLowStockAlert(product.lowStockAlert);
       setImageUrl(product.images?.[0] || "");
+      setImagePreviewUrl(product.images?.[0] || ""); // Set image preview
     }
   }, [product]);
 
-  // Update category ID once categories are fetched
-  useEffect(() => {
-    if (categories.length > 0 && product) {
-      setCategoryId(product.category?.id || "");
+  // Handle image file selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+
+      // Create a URL for the image preview
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreviewUrl(previewUrl); // Set image preview URL
     }
-  }, [categories, product]);
+  };
+
+  // Handle Firebase image upload
+  const handleImageUpload = () => {
+    return new Promise((resolve, reject) => {
+      if (!imageFile) {
+        resolve(imageUrl); // If no new image selected, use the existing imageUrl
+        return;
+      }
+
+      const storageRef = ref(storage, `products/${imageFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          // Get download URL
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            setImageUrl(url);
+            resolve(url); // Return the URL after upload is complete
+          });
+        }
+      );
+    });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: null })); // Clear errors on input change
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: null })); // Clear errors on change
     switch (name) {
       case "productName":
         setProductName(value);
@@ -89,9 +133,6 @@ const UpdateProductModal = ({
         break;
       case "lowStockAlert":
         setLowStockAlert(parseInt(value, 10));
-        break;
-      case "imageUrl":
-        setImageUrl(value);
         break;
       default:
         break;
@@ -112,7 +153,6 @@ const UpdateProductModal = ({
       validationErrors.inventoryCount = "Inventory count must be 0 or more.";
     if (!lowStockAlert || lowStockAlert < 0)
       validationErrors.lowStockAlert = "Low stock alert must be 0 or more.";
-    if (!imageUrl.trim()) validationErrors.imageUrl = "Image URL is required.";
 
     setErrors(validationErrors);
     return Object.keys(validationErrors).length === 0;
@@ -125,17 +165,21 @@ const UpdateProductModal = ({
       return; // Exit if validation fails
     }
 
-    const updatedProduct = {
-      name: productName,
-      description,
-      categoryId,
-      price,
-      inventoryCount,
-      lowStockAlert,
-      images: [imageUrl], // Update image URL directly
-    };
-
     try {
+      // Upload image and get the URL if new image is selected
+      const uploadedImageUrl = await handleImageUpload();
+
+      // Create updated product object
+      const updatedProduct = {
+        name: productName,
+        description,
+        categoryId,
+        price,
+        inventoryCount,
+        lowStockAlert,
+        images: [uploadedImageUrl], // Update image URL
+      };
+
       // Make PUT request to update the product
       const response = await axios.put(
         `https://localhost:7282/api/product/${product.id}`,
@@ -207,7 +251,6 @@ const UpdateProductModal = ({
                   as="select"
                   name="categoryId"
                   value={categoryId}
-                  defaultValue={categoryId}
                   onChange={handleInputChange}
                   isInvalid={!!errors.categoryId}
                   required
@@ -266,21 +309,26 @@ const UpdateProductModal = ({
               </Form.Group>
             </Col>
             <Col>
-              <Form.Group controlId="imageUrl">
-                <Form.Label>Image URL</Form.Label>
+              <Form.Group controlId="imageFile">
+                <Form.Label>Product Image</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter image URL"
-                  name="imageUrl"
-                  value={imageUrl}
-                  onChange={handleInputChange}
-                  isInvalid={!!errors.imageUrl}
-                  required
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.imageUrl}
-                </Form.Control.Feedback>
               </Form.Group>
+              {uploadProgress > 0 && <p>Upload Progress: {uploadProgress}%</p>}
+              {imagePreviewUrl && (
+                <img
+                  src={imagePreviewUrl}
+                  alt="Preview"
+                  style={{
+                    maxWidth: "100px",
+                    height: "auto",
+                    marginTop: "10px",
+                  }}
+                />
+              )}
             </Col>
           </Row>
 
