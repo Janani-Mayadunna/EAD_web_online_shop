@@ -4,6 +4,8 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios"; // Import axios for API requests
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Firebase imports
+import { storage } from "../../../firebase/firebaseConfig"; // Your Firebase configuration
 
 const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
   const [categories, setCategories] = useState([]); // State to hold categories
@@ -13,7 +15,9 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
   const [price, setPrice] = useState(0);
   const [inventoryCount, setInventoryCount] = useState(0);
   const [lowStockAlert, setLowStockAlert] = useState(0);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState(null); // State for image file
+  const [imageUrl, setImageUrl] = useState(""); // URL of the uploaded image
+  const [uploadProgress, setUploadProgress] = useState(0); // Upload progress tracking
   const [errors, setErrors] = useState({}); // Validation error state
 
   // Fetch categories when the modal is opened
@@ -62,12 +66,48 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
       case "lowStockAlert":
         setLowStockAlert(parseInt(value, 10));
         break;
-      case "imageUrl":
-        setImageUrl(value);
-        break;
       default:
         break;
     }
+  };
+
+  // Handle image file selection
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  // Handle Firebase image upload
+  const handleImageUpload = () => {
+    return new Promise((resolve, reject) => {
+      if (!imageFile) {
+        reject(new Error("No file selected"));
+        return;
+      }
+
+      const storageRef = ref(storage, `products/${imageFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          // Get download URL
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            setImageUrl(url);
+            resolve(url); // Return the URL after upload is complete
+          });
+        }
+      );
+    });
   };
 
   const validateForm = () => {
@@ -91,9 +131,6 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
     if (!lowStockAlert || lowStockAlert < 0) {
       validationErrors.lowStockAlert = "Low stock alert must be 0 or more.";
     }
-    if (!imageUrl.trim()) {
-      validationErrors.imageUrl = "Image URL is required.";
-    }
 
     setErrors(validationErrors);
     return Object.keys(validationErrors).length === 0;
@@ -106,24 +143,29 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
       return; // Exit if form validation fails
     }
 
-    // Create a new product object
-    const newProduct = {
-      name: productName,
-      description,
-      categoryId,
-      price,
-      inventoryCount,
-      lowStockAlert,
-      images: [imageUrl], // Add image URL directly
-    };
-
     try {
+      // Upload image and get URL
+      const uploadedImageUrl = await handleImageUpload();
+
+      // Create a new product object
+      const newProduct = {
+        name: productName,
+        description,
+        categoryId,
+        price,
+        inventoryCount,
+        lowStockAlert,
+        images: [uploadedImageUrl], // Add image URL after upload
+      };
+
+      // Submit product details to the server
       await axios.post("https://localhost:7282/api/product", newProduct, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("vendor_token")}`,
           "Content-Type": "application/json",
         },
       });
+
       handleAddProduct(newProduct); // Notify parent component of new product
       handleClose(); // Close the modal after submission
     } catch (error) {
@@ -242,21 +284,16 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
               </Form.Group>
             </Col>
             <Col>
-              <Form.Group controlId="imageUrl">
-                <Form.Label>Image URL</Form.Label>
+              <Form.Group controlId="imageFile">
+                <Form.Label>Product Image</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter image URL"
-                  name="imageUrl"
-                  value={imageUrl}
-                  onChange={handleInputChange}
-                  isInvalid={!!errors.imageUrl}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
                   required
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.imageUrl}
-                </Form.Control.Feedback>
               </Form.Group>
+              {uploadProgress > 0 && <p>Upload Progress: {uploadProgress}%</p>}
             </Col>
           </Row>
 
