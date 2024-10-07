@@ -73,7 +73,7 @@ const VendorDashboard = () => {
 
           // Count total sales (completed orders)
           const completedOrders = orders.filter(
-            (order) => order.status === "Completed"
+            (order) => order.status === "Delivered"
           );
           setTotalSales(completedOrders.length);
 
@@ -173,9 +173,9 @@ const VendorDashboard = () => {
               className="card p-4 mb-4 shadow-sm text-center bg-white"
               style={{ borderRadius: "0px" }}
             >
-              <i className="bi bi-box-seam fs-2 text-primary mb-3"></i>
+              <i className="bi bi-box-seam fs-2 text-danger mb-3"></i>
               <h5 className="text-dark">Total Products</h5>
-              <h2 className="text-primary">{productsCount}</h2>
+              <h2 className="text-danger">{productsCount}</h2>
             </div>
           </div>
           <div className="col-md-3">
