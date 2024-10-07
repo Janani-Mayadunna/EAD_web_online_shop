@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Layout from "../layout";
+import { useNavigate } from "react-router-dom";
 
 const VendorDashboard = () => {
   const [productsCount, setProductsCount] = useState(0);
@@ -13,6 +14,19 @@ const VendorDashboard = () => {
 
   // Possible order statuses
   const possibleStatuses = ["Processing", "Delivered", "Completed", "Canceled"];
+
+  const navigate = useNavigate(); // Hook for navigating to different routes
+
+  // Check if vendor_id and vendor_token are in localStorage
+  useEffect(() => {
+    const vendorId = localStorage.getItem("vendor_id");
+    const token = localStorage.getItem("vendor_token");
+
+    if (!vendorId || !token) {
+      // If vendor_id or token is missing, redirect to login page
+      navigate("/vendor-login");
+    }
+  }, [navigate]);
 
   // Fetch products by vendor_id and count
   useEffect(() => {
