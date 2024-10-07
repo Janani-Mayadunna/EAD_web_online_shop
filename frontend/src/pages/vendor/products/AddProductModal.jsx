@@ -18,6 +18,7 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
   const [imageFile, setImageFile] = useState(null); // State for image file
   const [imageUrl, setImageUrl] = useState(""); // URL of the uploaded image
   const [uploadProgress, setUploadProgress] = useState(0); // Upload progress tracking
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null); // State for image preview
   const [errors, setErrors] = useState({}); // Validation error state
 
   // Fetch categories when the modal is opened
@@ -73,8 +74,13 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
 
   // Handle image file selection
   const handleImageChange = (e) => {
-    if (e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+
+      // Create a URL for the image preview
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreviewUrl(previewUrl); // Set image preview URL
     }
   };
 
@@ -316,6 +322,15 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
+            {imagePreviewUrl && (
+              <Col>
+                <img
+                  src={imagePreviewUrl}
+                  alt="Preview"
+                  style={{ width: "200px" }}
+                />
+              </Col>
+            )}
           </Row>
 
           <Modal.Footer>
