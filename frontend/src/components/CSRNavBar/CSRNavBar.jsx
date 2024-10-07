@@ -8,7 +8,7 @@ import '../AdminNav/AdminNav.css';
 
 const CSRNavBar = () => {
   function logout() {
-    localStorage.removeItem('systemInfo');
+    localStorage.removeItem('csr_token');
   }
   return (
     <div className='mainNavContainer d-flex justify-content-end'>
@@ -47,7 +47,7 @@ const CSRNavBar = () => {
                 </NavDropdown.Item>
                 <NavDropdown.Item href='#action/3.2'>
                   <Link
-                    to='/system/auth'
+                    to='/'
                     style={{ color: '#359733' }}
                     class='nav-link'
                     onClick={logout}

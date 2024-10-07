@@ -5,8 +5,8 @@ import AdminDashboard from '../pages/admin/dashboard/AdminDashboard';
 import VendorRegister from '../pages/admin/vendor-register/VendorRegister';
 import AdminAllProducts from '../pages/admin/all-products/AdminAllProducts';
 import AdminLogin from '../pages/admin/admin-login/AdminLogin';
-import CSRDashboard from '../pages/sales-rep/order-details/CSROrderDetails';
 import CSROrderCancel from '../pages/sales-rep/order-cancel/CSROrderCancel';
+import CSROrderDetails from '../pages/sales-rep/order-details/CSROrderDetails';
 import CSRLogin from '../pages/sales-rep/csr-login/CSRLogin';
 import VendorDashboard from '../pages/vendor/dashboard/VendorDashboard';
 import VendorCategory from '../pages/vendor/category/VendorCategory';
@@ -15,6 +15,9 @@ import VendorOrders from '../pages/vendor/orders/VendorOrders';
 import VendorProfile from '../pages/vendor/vendor-profile/VendorProfile';
 import VendorRates from '../pages/vendor/rate-reviews/VendorRates';
 import VendorLogin from '../pages/vendor/vendor-login/VendorLogin';
+import ProductCategories from '../pages/admin/products-categories/ProductCategories';
+import UserManagement from '../pages/admin/user-management/UserManagement';
+import OrderManagement from '../pages/admin/orders/OrderManagement';
 
 const routers = [
   {
@@ -38,8 +41,16 @@ const routers = [
     component: AdminLogin,
   },
   {
+    path: ROUTE.ADMIN_CATEGORIES,
+    component: ProductCategories,
+  },
+  {
+    path: ROUTE.ADMIN_USERS,
+    component: UserManagement,
+  },
+  {
     path: ROUTE.CSR_ORDER_DETAILS,
-    component: CSRDashboard,
+    component: CSROrderDetails,
   },
   {
     path: ROUTE.CSR_CANCEL_REQUESTS,
@@ -77,6 +88,10 @@ const routers = [
     path: ROUTE.VENDOR_LOGIN,
     component: VendorLogin,
   },
+  {
+    path: ROUTE.ORDERS,
+    component: OrderManagement,
+  }
 ];
 
 const Router = () => (
