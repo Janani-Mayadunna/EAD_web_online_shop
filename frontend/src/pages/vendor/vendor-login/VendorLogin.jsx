@@ -4,7 +4,7 @@ import axios from "axios";
 import Layout from "../layout";
 import "./VendorLogin.css";
 import Logo from "../../../images/logo.png";
-import BackGroundImage from "../../../images/back7.jpg";
+import BackGroundImage from "../../../images/back17.jpg";
 
 const VendorLogin = () => {
   const [email, setEmail] = useState("");
@@ -115,13 +115,28 @@ const VendorLogin = () => {
               required
             />
           </div>
-          <button type="submit" className="btn-login">
+          <button
+            type="submit"
+            className="btn-login"
+            style={{
+              backgroundColor: "#5ccee3", // Set the background color to light blue
+              color: "#fff", // Text color white
+              border: "none", // Remove border
+              borderRadius: "5px", // Add border radius
+              padding: "10px 20px", // Padding for the button
+              cursor: "pointer", // Pointer on hover
+              transition: "background-color 0.3s ease", // Smooth transition effect on hover
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "#3da1b3"; // Darker blue on hover
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "#5ccee3"; // Back to light blue when hover ends
+            }}
+          >
             Login
           </button>
         </form>
-        <p className="forgot-password">
-          <a href="#">Sign Up Here</a>
-        </p>
       </div>
     </div>
   );

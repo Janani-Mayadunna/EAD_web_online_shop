@@ -4,6 +4,8 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios"; // Import axios for API requests
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Firebase imports
+import { storage } from "../../../firebase/firebaseConfig"; // Your Firebase configuration
 
 const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
   const [categories, setCategories] = useState([]); // State to hold categories
@@ -13,7 +15,11 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
   const [price, setPrice] = useState(0);
   const [inventoryCount, setInventoryCount] = useState(0);
   const [lowStockAlert, setLowStockAlert] = useState(0);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState(null); // State for image file
+  const [imageUrl, setImageUrl] = useState(""); // URL of the uploaded image
+  const [uploadProgress, setUploadProgress] = useState(0); // Upload progress tracking
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null); // State for image preview
+  const [errors, setErrors] = useState({}); // Validation error state
 
   // Fetch categories when the modal is opened
   useEffect(() => {
@@ -41,6 +47,7 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: null })); // Clear errors on change
     switch (name) {
       case "productName":
         setProductName(value);
@@ -60,33 +67,111 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
       case "lowStockAlert":
         setLowStockAlert(parseInt(value, 10));
         break;
-      case "imageUrl":
-        setImageUrl(value);
-        break;
       default:
         break;
     }
   };
 
-  const handleSubmit = async () => {
-    // Create a new product object
-    const newProduct = {
-      name: productName,
-      description,
-      categoryId,
-      price,
-      inventoryCount,
-      lowStockAlert,
-      images: [imageUrl], // Add image URL directly
-    };
+  // Handle image file selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+
+      // Create a URL for the image preview
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreviewUrl(previewUrl); // Set image preview URL
+    }
+  };
+
+  // Handle Firebase image upload
+  const handleImageUpload = () => {
+    return new Promise((resolve, reject) => {
+      if (!imageFile) {
+        reject(new Error("No file selected"));
+        return;
+      }
+
+      const storageRef = ref(storage, `products/${imageFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          // Get download URL
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            setImageUrl(url);
+            resolve(url); // Return the URL after upload is complete
+          });
+        }
+      );
+    });
+  };
+
+  const validateForm = () => {
+    let validationErrors = {};
+
+    if (!productName.trim()) {
+      validationErrors.productName = "Product name is required.";
+    }
+    if (!description.trim()) {
+      validationErrors.description = "Description is required.";
+    }
+    if (!categoryId) {
+      validationErrors.categoryId = "Please select a category.";
+    }
+    if (!price || price <= 0) {
+      validationErrors.price = "Price must be a positive number.";
+    }
+    if (!inventoryCount || inventoryCount < 0) {
+      validationErrors.inventoryCount = "Inventory count must be 0 or more.";
+    }
+    if (!lowStockAlert || lowStockAlert < 0) {
+      validationErrors.lowStockAlert = "Low stock alert must be 0 or more.";
+    }
+
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    if (!validateForm()) {
+      return; // Exit if form validation fails
+    }
 
     try {
+      // Upload image and get URL
+      const uploadedImageUrl = await handleImageUpload();
+
+      // Create a new product object
+      const newProduct = {
+        name: productName,
+        description,
+        categoryId,
+        price,
+        inventoryCount,
+        lowStockAlert,
+        images: [uploadedImageUrl], // Add image URL after upload
+      };
+
+      // Submit product details to the server
       await axios.post("https://localhost:7282/api/product", newProduct, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("vendor_token")}`,
           "Content-Type": "application/json",
         },
       });
+
       handleAddProduct(newProduct); // Notify parent component of new product
       handleClose(); // Close the modal after submission
     } catch (error) {
@@ -101,7 +186,7 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
       </Modal.Header>
 
       <Modal.Body>
-        <Form className="col-md-11 mx-auto">
+        <Form className="col-md-11 mx-auto" onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col>
               <Form.Group controlId="productName">
@@ -112,8 +197,12 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="productName"
                   value={productName}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.productName}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.productName}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
@@ -125,8 +214,12 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="price"
                   value={price}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.price}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.price}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -140,6 +233,7 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="categoryId"
                   value={categoryId}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.categoryId}
                   required
                 >
                   <option value="">Select category</option>
@@ -153,6 +247,9 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                     <option disabled>No categories available</option>
                   )}
                 </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.categoryId}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
@@ -164,8 +261,12 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="inventoryCount"
                   value={inventoryCount}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.inventoryCount}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.inventoryCount}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -180,22 +281,25 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="lowStockAlert"
                   value={lowStockAlert}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.lowStockAlert}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.lowStockAlert}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
-              <Form.Group controlId="imageUrl">
-                <Form.Label>Image URL</Form.Label>
+              <Form.Group controlId="imageFile">
+                <Form.Label>Product Image</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter image URL"
-                  name="imageUrl"
-                  value={imageUrl}
-                  onChange={handleInputChange}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
                   required
                 />
               </Form.Group>
+              {uploadProgress > 0 && <p>Upload Progress: {uploadProgress}%</p>}
             </Col>
           </Row>
 
@@ -210,26 +314,39 @@ const AddProductModal = ({ show, handleClose, handleAddProduct }) => {
                   name="description"
                   value={description}
                   onChange={handleInputChange}
+                  isInvalid={!!errors.description}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.description}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
+            {imagePreviewUrl && (
+              <Col>
+                <img
+                  src={imagePreviewUrl}
+                  alt="Preview"
+                  style={{ width: "200px" }}
+                />
+              </Col>
+            )}
           </Row>
+
+          <Modal.Footer>
+            <button type="submit" className="btn btn-success">
+              Add Product
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={handleClose}
+            >
+              Close
+            </button>
+          </Modal.Footer>
         </Form>
       </Modal.Body>
-
-      <Modal.Footer>
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={handleSubmit}
-        >
-          Add Product
-        </button>
-        <button className="btn btn-danger" onClick={handleClose}>
-          Close
-        </button>
-      </Modal.Footer>
     </Modal>
   );
 };

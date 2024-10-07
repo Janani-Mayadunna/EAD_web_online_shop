@@ -1,5 +1,5 @@
 .badge-success {
-  background-color: #40a769;
+  background-color: #69756e;
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
@@ -7,7 +7,7 @@
 }
 
 .badge-danger {
-  background-color: #575353;
+  background-color: #be5e5e;
   color: white;
   padding: 5px 10px;
   border-radius: 5px;

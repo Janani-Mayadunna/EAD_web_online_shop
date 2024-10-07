@@ -27,7 +27,13 @@ const VendorCategory = () => {
             },
           }
         );
-        setCategories(response.data); // Update the categories state with the fetched data
+
+        // Sort the categories array by _id in descending order (latest first)
+        const sortedCategories = response.data.sort((a, b) =>
+          a._id < b._id ? 1 : -1
+        );
+
+        setCategories(sortedCategories); // Update the categories state with the sorted data
         setLoading(false);
       } catch (error) {
         setError("Failed to fetch categories");
@@ -47,20 +53,13 @@ const VendorCategory = () => {
     setOpenUpdateCategoryModal(true);
   };
 
-  const handleDeleteCategory = (id) => {
-    const updatedCategories = categories.filter(
-      (category) => category.id !== id
-    );
-    setCategories(updatedCategories);
-  };
-
   const columns = [
     {
       name: "Category Name",
       selector: (row) => row.name,
       sortable: true,
       style: {
-        fontSize: "16px",
+        fontSize: "15px",
       },
     },
     {
@@ -73,7 +72,7 @@ const VendorCategory = () => {
         ),
       sortable: true,
       style: {
-        fontSize: "16px",
+        fontSize: "15px",
       },
     },
     {
@@ -85,12 +84,6 @@ const VendorCategory = () => {
             onClick={() => handleUpdateCategoryClick(row)}
           >
             <i className="bi bi-pencil-square"></i>
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => handleDeleteCategory(row.id)}
-          >
-            <i className="bi bi-trash"></i>
           </button>
         </div>
       ),
@@ -130,14 +123,14 @@ const VendorCategory = () => {
             customStyles={{
               headCells: {
                 style: {
-                  fontSize: "18px",
+                  fontSize: "16px",
                   fontWeight: "bold",
                   backgroundColor: "#e0e0e0",
                 },
               },
               cells: {
                 style: {
-                  fontSize: "16px",
+                  fontSize: "15px",
                 },
               },
             }}
@@ -150,7 +143,7 @@ const VendorCategory = () => {
         show={openAddCategoryModal}
         handleClose={() => setOpenAddCategoryModal(false)}
         handleAddCategory={(newCategory) => {
-          setCategories([...categories, newCategory]);
+          setCategories([newCategory, ...categories]); // Prepend the new category to show it at the top
           setOpenAddCategoryModal(false);
         }}
       />

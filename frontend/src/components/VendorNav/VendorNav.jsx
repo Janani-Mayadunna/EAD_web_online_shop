@@ -13,7 +13,7 @@ const VendorNav = () => {
   const [showLowStock, setShowLowStock] = useState(false);
 
   function logout() {
-    localStorage.removeItem("systemInfo");
+    localStorage.removeItem("vendor_token");
   }
 
   // Filter low stock items
@@ -39,7 +39,7 @@ const VendorNav = () => {
               <NavDropdown active title="System Vendor" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">
                   <Link
-                    to="/system/admin-profile"
+                    to="/vendor/profile"
                     className="nav-link"
                     aria-current="page"
                   >
@@ -56,7 +56,7 @@ const VendorNav = () => {
                 </NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
                   <Link
-                    to="/system/auth"
+                    to="/vendor-login"
                     style={{ color: "#359733" }}
                     className="nav-link"
                     onClick={logout}

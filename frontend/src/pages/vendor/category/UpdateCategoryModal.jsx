@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import axios from "axios"; // Import Axios for API calls
 
 const UpdateCategoryModal = ({
   show,
@@ -9,24 +10,38 @@ const UpdateCategoryModal = ({
   handleUpdateCategory,
 }) => {
   const [categoryName, setCategoryName] = useState(category?.name || "");
-  const [isActive, setIsActive] = useState(category?.isActive || false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (category) {
       setCategoryName(category.name);
-      setIsActive(category.isActive);
     }
   }, [category]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const updatedCategory = {
-      id: category.id, // Keep the same ID
       name: categoryName,
-      isActive,
     };
 
-    handleUpdateCategory(updatedCategory);
-    handleClose();
+    try {
+      // Make API request to update the category
+      const response = await axios.put(
+        `https://localhost:7282/api/category/${category.id}`,
+        updatedCategory,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("vendor_token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // If the category is successfully updated, pass it to parent component
+      handleUpdateCategory(response.data);
+      handleClose();
+    } catch (error) {
+      setError("Failed to update category. Please try again.");
+    }
   };
 
   return (
@@ -37,6 +52,7 @@ const UpdateCategoryModal = ({
 
       <Modal.Body>
         <Form>
+          {error && <p className="text-danger">{error}</p>}
           <div className="form-group mb-3">
             <label htmlFor="CategoryName">Category Name</label>
             <input
@@ -45,16 +61,6 @@ const UpdateCategoryModal = ({
               placeholder="Enter category name"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group mb-3">
-            <Form.Check
-              type="switch"
-              id="isActive"
-              label="Active"
-              checked={isActive}
-              onChange={(e) => setIsActive(e.target.checked)}
             />
           </div>
         </Form>
