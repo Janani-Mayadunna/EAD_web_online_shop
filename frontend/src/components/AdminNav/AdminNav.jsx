@@ -13,7 +13,7 @@ const AdminNav = () => {
   const [showLowStock, setShowLowStock] = useState(false);
 
   function logout() {
-    localStorage.removeItem('systemInfo');
+    localStorage.removeItem('admin_token');
   }
 
   // Filter low stock items
@@ -90,7 +90,7 @@ const AdminNav = () => {
                 </NavDropdown.Item>
                 <NavDropdown.Item href='#action/3.2'>
                   <Link
-                    to='/system/auth'
+                    to='/'
                     style={{ color: '#359733' }}
                     className='nav-link'
                     onClick={logout}

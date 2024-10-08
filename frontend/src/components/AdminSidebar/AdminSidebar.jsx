@@ -20,73 +20,86 @@ const AdminSidebar = () => {
   }, [location]);
 
   return (
-    <div className="main-container">
-      <div className="sidebar" id="side-nav">
-        <div className="header-box px-3 pb-4 d-flex"
-        style={{
-          paddingTop: '60px',
-        }}
+    <div className='main-container'>
+      <div className='sidebar' id='side-nav'>
+        <div
+          className='header-box px-3 pb-4 d-flex'
+          style={{
+            paddingTop: '60px',
+          }}
         >
-          <h1 className="fs-3 px-4 items-center">
-            <span className="text-black">Smart Store</span>
+          <h1 className='fs-3 px-4 items-center'>
+            <span className='text-black'>Smart Store</span>
           </h1>
-          <button className="btn d-md-none d-block close-btn px-2 py-0 text-white">
-            <i class="bi bi-list"></i>
+          <button className='btn d-md-none d-block close-btn px-2 py-0 text-white'>
+            <i class='bi bi-list'></i>
           </button>
         </div>
 
-        <div className="logoSideBar">
-          <img className="imgLogoSideBar" src={Logo} alt="" />
+        <div className='logoSideBar'>
+          <img className='imgLogoSideBar' src={Logo} alt='' />
         </div>
 
         <div>
-          <ul className="list-untyled px-2">
-            <li
-              className={
-                activeItem === '/admin' ? 'active' : ''
-              }
-            >
+          <ul className='list-untyled px-2'>
+            <li className={activeItem === '/admin' ? 'active' : ''}>
               <Link
-                to="/admin"
-                className="text-decoration-none px-3 py-2 d-block"
+                to='/admin'
+                className='text-decoration-none px-3 py-2 d-block'
               >
-                <i class="bi bi-house-door"></i>
+                <i class='bi bi-house-door'></i>
                 <span style={{ paddingLeft: '0.7rem' }}>Dashboard</span>
               </Link>
             </li>
-            <li
-              className={
-                activeItem === '/vendor/register' ? 'active' : ''
-              }
-            >
+
+            <li className={activeItem === '/admin/categories' ? 'active' : ''}>
               <Link
-                to="/vendor/register"
-                className="text-decoration-none px-3 py-2 d-block"
+                to='/admin/categories'
+                className='text-decoration-none px-3 py-2 d-block'
               >
-                <i class="bi bi-bag-plus"></i>
+                <i class='bi bi-card-list'></i>
+                <span style={{ paddingLeft: '0.7rem' }}>Categories</span>
+              </Link>
+            </li>
+            <li className={activeItem === '/orders' ? 'active' : ''}>
+              <Link
+                to='/orders'
+                className='text-decoration-none px-3 py-2 d-block'
+              >
+                <i class='bi bi-card-list'></i>
+                <span style={{ paddingLeft: '0.7rem' }}>Orders</span>
+              </Link>
+            </li>
+            <li className={activeItem === '/admin/users' ? 'active' : ''}>
+              <Link
+                to='/admin/users'
+                className='text-decoration-none px-3 py-2 d-block'
+              >
+                <i class='bi bi-card-list'></i>
+                <span style={{ paddingLeft: '0.7rem' }}>Users</span>
+              </Link>
+            </li>
+            <li className={activeItem === '/admin/allproducts' ? 'active' : ''}>
+              <Link
+                to='/admin/allproducts'
+                className='text-decoration-none px-3 py-2 d-block'
+              >
+                <i class='bi bi-card-list'></i>
+                <span style={{ paddingLeft: '0.7rem' }}>Inventory</span>
+              </Link>
+            </li>
+            <li className={activeItem === '/vendor/register' ? 'active' : ''}>
+              <Link
+                to='/vendor/register'
+                className='text-decoration-none px-3 py-2 d-block'
+              >
+                <i class='bi bi-bag-plus'></i>
                 <span style={{ paddingLeft: '0.7rem' }}>Register Vendors</span>
               </Link>
             </li>
-            <li
-              className={
-                activeItem === '/admin/allproducts' ? 'active' : ''
-              }
-            >
-              <Link
-                to="/admin/allproducts"
-                className="text-decoration-none px-3 py-2 d-block"
-              >
-                <i class="bi bi-card-list"></i>
-                <span style={{ paddingLeft: '0.7rem' }}>All Products</span>
-              </Link>
-            </li>
-
-           
-
-           
           </ul>
         </div>
-        <hr className="h-color mx-2" />
+        <hr className='h-color mx-2' />
       </div>
     </div>
   );

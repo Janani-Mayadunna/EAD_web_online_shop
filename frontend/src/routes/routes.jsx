@@ -4,8 +4,20 @@ import Landing from '../pages/landing/Landing';
 import AdminDashboard from '../pages/admin/dashboard/AdminDashboard';
 import VendorRegister from '../pages/admin/vendor-register/VendorRegister';
 import AdminAllProducts from '../pages/admin/all-products/AdminAllProducts';
-import CSRDashboard from '../pages/sales-rep/order-details/CSROrderDetails';
+import AdminLogin from '../pages/admin/admin-login/AdminLogin';
 import CSROrderCancel from '../pages/sales-rep/order-cancel/CSROrderCancel';
+import CSROrderDetails from '../pages/sales-rep/order-details/CSROrderDetails';
+import CSRLogin from '../pages/sales-rep/csr-login/CSRLogin';
+import VendorDashboard from '../pages/vendor/dashboard/VendorDashboard';
+import VendorCategory from '../pages/vendor/category/VendorCategory';
+import VendorProducts from '../pages/vendor/products/VendorProducts';
+import VendorOrders from '../pages/vendor/orders/VendorOrders';
+import VendorProfile from '../pages/vendor/vendor-profile/VendorProfile';
+import VendorRates from '../pages/vendor/rate-reviews/VendorRates';
+import VendorLogin from '../pages/vendor/vendor-login/VendorLogin';
+import ProductCategories from '../pages/admin/products-categories/ProductCategories';
+import UserManagement from '../pages/admin/user-management/UserManagement';
+import OrderManagement from '../pages/admin/orders/OrderManagement';
 
 const routers = [
   {
@@ -25,13 +37,61 @@ const routers = [
     component: AdminAllProducts,
   },
   {
+    path: ROUTE.ADMIN_LOGIN,
+    component: AdminLogin,
+  },
+  {
+    path: ROUTE.ADMIN_CATEGORIES,
+    component: ProductCategories,
+  },
+  {
+    path: ROUTE.ADMIN_USERS,
+    component: UserManagement,
+  },
+  {
     path: ROUTE.CSR_ORDER_DETAILS,
-    component: CSRDashboard,
+    component: CSROrderDetails,
   },
   {
     path: ROUTE.CSR_CANCEL_REQUESTS,
     component: CSROrderCancel,
   },
+  {
+    path: ROUTE.CSR_LOGIN,
+    component: CSRLogin,
+  },
+  {
+    path: ROUTE.VENDOR_DASHBOARD,
+    component: VendorDashboard,
+  },
+  {
+    path: ROUTE.VENDOR_CATEGORY,
+    component: VendorCategory,
+  },
+  {
+    path: ROUTE.VENDOR_PRODUCTS,
+    component: VendorProducts,
+  },
+  {
+    path: ROUTE.VENDOR_ORDERS,
+    component: VendorOrders,
+  },
+  {
+    path: ROUTE.VENDOR_PROFILE,
+    component: VendorProfile,
+  },
+  {
+    path: ROUTE.VENDOR_RATES,
+    component: VendorRates,
+  },
+  {
+    path: ROUTE.VENDOR_LOGIN,
+    component: VendorLogin,
+  },
+  {
+    path: ROUTE.ORDERS,
+    component: OrderManagement,
+  }
 ];
 
 const Router = () => (
