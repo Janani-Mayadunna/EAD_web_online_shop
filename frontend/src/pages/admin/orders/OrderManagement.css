@@ -1,0 +1,47 @@
+.orders-container {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 20px;
+  }
+  
+  .orders-header {
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .orders-data-table {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 20px;
+  }
+  
+  .order-items-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .expanded-items-container {
+    margin-top: 10px;
+  }
+  
+  .order-item-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .mark-as-delivered-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11px;
+    height: 40px;
+    line-height: 14px;
+  }
