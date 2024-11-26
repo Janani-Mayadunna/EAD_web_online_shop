@@ -1,6 +1,6 @@
 # 🌐 E-Commerce React Frontend  
 
-![Thumbnail](path/to/your/thumbnail.jpg)  
+![Thumbnail](https://github.com/Janani-Mayadunna/EAD_web_online_shop/blob/main/Web%20UIs.png)  
 
 This repository contains the source code for the **E-Commerce Web Application Frontend**, developed as part of the Enterprise Application Development module in collaboration with **IFS Academy**. The web application serves as the back-office platform for managing the e-commerce system.
 
