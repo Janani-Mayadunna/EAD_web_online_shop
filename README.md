@@ -34,7 +34,7 @@ This repository contains the source code for the **E-Commerce Web Application Fr
 - **UI Library**: Bootstrap  
 - **State Management**: React Context API  
 - **Backend**: [.NET Core Web API](https://github.com/sahanperera00/EAD_Web_Service)  
-- **Mobile Application**: [Android/Java](https://github.com/AbishekPerera/EAD_Mobile_App)
+- **Mobile Application**: [Android/Java](https://github.com/AbishekPerera/EAD_online_shop)
 
 ---
 
